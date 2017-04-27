@@ -1,9 +1,9 @@
 # sjtuxiangxiang
-This is the project for object-oriented software engineering class.
+This is the project for object-oriented software engineering course.
 
 ## How to run the server?
 
-Mac OS / Linux user can open your terminal and run commands as below: 
+Mac OS / Linux user can open your terminal and run commands as below:
 
 1. Download the source code
 
