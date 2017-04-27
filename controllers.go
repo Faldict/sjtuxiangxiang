@@ -21,6 +21,8 @@ func userController(w http.ResponseWriter, req *http.Request) {
             logoutUserController(w, req)
         case "info" :
             infoUserController(w, req)
+        case "register" :
+            registerUserController(w, req)
         default:
             NotFound(w, req)
     }
@@ -39,5 +41,14 @@ func itemController(w http.ResponseWriter, req *http.Request) {
             shareItemController(w http.ResponseWriter, req *http.Request)
         default:
             NotFound(w, req)
+    }
+}
+
+func registerUserController(w http.ResponseWriter, req *http.Request) {
+    if req.Method == "POST" {
+        username := req.FormValue("username")
+        passwd := req.FormValue("password")
+        email := req.FormValue("email")
+        register(username, passwd, email)
     }
 }
