@@ -1,6 +1,7 @@
 # sjtuxiangxiang
 [![Magnum CI](https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg)]()
 [![label](https://img.shields.io/github/issues-raw/badges/shields/website.svg)]()
+[![label](https://img.shields.io/badge/SJTU-IEEE-brightgreen.svg)]()
 
 This is the project for object-oriented software engineering course.
 
