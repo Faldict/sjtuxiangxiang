@@ -28,7 +28,7 @@ $ go run main.go
 Otherwise, I have pre-built and uploaded an execute bin. You may run this command:
 
 ```
-$ ./main.go
+$ ./main
 ```
 
 The binary file's name is not so standard that I will rename it some time later.
