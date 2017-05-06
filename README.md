@@ -1,9 +1,14 @@
 # sjtuxiangxiang
-This is the project for object-oriented software engineering class.
+[![Magnum CI](https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg)]()
+[![label](https://img.shields.io/github/issues-raw/badges/shields/website.svg)]()
+[![label](https://img.shields.io/badge/SJTU-SEIEE-blue.svg)]()
+[![label](https://img.shields.io/badge/SJTU-IEEE-brightgreen.svg)]()
+
+This is the project for object-oriented software engineering course.
 
 ## How to run the server?
 
-Mac OS / Linux user can open your terminal and run commands as below: 
+Mac OS / Linux user can open your terminal and run commands as below:
 
 1. Download the source code
 
@@ -23,7 +28,7 @@ $ go run main.go
 Otherwise, I have pre-built and uploaded an execute bin. You may run this command:
 
 ```
-$ ./main.go
+$ ./main
 ```
 
 The binary file's name is not so standard that I will rename it some time later.
