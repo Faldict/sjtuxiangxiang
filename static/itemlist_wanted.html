@@ -18,12 +18,12 @@
 		<div class="col-md-12">
 			<nav class="navbar navbar-default" role="navigation">
 				<div class="navbar-header">
-
+					 
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
 					</button> <a class="navbar-brand" href="#">交大享享</a>
 				</div>
-
+				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
@@ -36,7 +36,7 @@
 					<form class="navbar-form navbar-left" role="search">
 						<div class="form-group">
 							<input type="text" class="form-control">
-						</div>
+						</div> 
 						<button type="submit" class="btn btn-default">
 							搜索
 						</button>
@@ -68,7 +68,7 @@
 						</li>
 					</ul>
 				</div>
-
+				
 			</nav>
 
 			<img src="img/banner-slim.png" class="img-responsive" alt="Responsive image">
@@ -110,12 +110,12 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody id="table-body">
+				<tbody>
 					<tr>
 						<td>
 							<span class="label label-default">未完成</span>
 						</td>
-						<td class="number">
+						<td>
 							 1
 						</td>
 						<td>
@@ -135,7 +135,7 @@
 						<td>
 							<span class="label label-success">已完成</span>
 						</td>
-						<td class="number">
+						<td>
 							 2
 						</td>
 						<td>
@@ -180,10 +180,9 @@
 
 			<p class="text-muted">
 				在这里你可以浏览所有的物品需求，并发布自己的需求。
-			</p>
-			<button type="button" class="btn btn-lg btn-primary" style="width: auto;display: table;margin-left: auto;margin-right: auto;" onclick="addItem()">
-
-				发布需求
+			</p> 
+			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#uploadrequest" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+			  发布需求
 			</button>
 		</div>
 	</div>
@@ -198,9 +197,145 @@
 
 
 
+  <!-- Modal -->
+<div class="modal fade" id="uploadrequest" tabindex="-1" role="dialog" aria-labelledby="uploadrequest">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">发布需求</h4>
+      </div>
+      <div class="modal-body">
+						<form role="form">
+							<div class="form-group">
+								 
+								<label for="requesttitle">
+									需求标题
+								</label>
+								<input type="text" class="form-control" id="requesttitle" />
+							</div>
+							<div class="form-group">
+								 
+								<label for="exampleInputPassword1">
+									租借价格
+								</label>
+							</div>
+							<div class="col-md-6">
+							<div class="input-group">
+							  <span class="input-group-addon">¥</span>
+							  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="与出借人协商，请输入0">
+							</div>
+							</div>
+							<div class="col-md-6">
+									<div class="radio">
+									<label>
+										<input type="radio" /> /天
+									</label>
+									<label>
+										<input type="radio" /> /次
+									</label>
+									<label>
+										<input type="radio" /> 与出借人协商
+									</label>
+									</div> 
+							</div>
+							<div class="form-group">
+												<label>
+									详细内容
+								</label>
+							<textarea class="form-control" rows="5"></textarea></br>
+								<label>
+									有效日期
+								</label>
+								<!-- 这里需要js控件，还未实现 -->
+							</div>
+				<form action="" class="form-horizontal"  role="form">
+			        <fieldset>
+						<div class="form-group">
+			                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy MM dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+			                    <input class="form-control" size="16" type="text" value="" readonly>
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			                </div>
+							<input type="hidden" id="dtp_input2" value="" /><br/>
+			            </div>
+
+						<p>至</p>
+
+						<div class="form-group">
+			                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy MM dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+			                    <input class="form-control" size="16" type="text" value="" readonly>
+			                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			                </div>
+							<input type="hidden" id="dtp_input2" value="" /><br/>
+			            </div>
+			        </fieldset>
+			    </form>
+							<div class="form-group">
+
+								<p class="help-block">
+									发布需求代表您同意协议。
+								</p>
+							</div>
+
+						</form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">发布</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
-    <script src="js/example.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+	$('.form_date').datetimepicker({
+        language:  'ua',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+	$('.form_time').datetimepicker({
+        language:  'ua',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 1,
+		minView: 0,
+		maxView: 1,
+		forceParse: 0
+    });
+</script>
+
+
+
+
   </body>
 </html>
