@@ -18,12 +18,12 @@
 		<div class="col-md-12">
 			<nav class="navbar navbar-default" role="navigation">
 				<div class="navbar-header">
-					 
+
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
 					</button> <a class="navbar-brand" href="#">交大享享</a>
 				</div>
-				
+
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
@@ -36,7 +36,7 @@
 					<form class="navbar-form navbar-left" role="search">
 						<div class="form-group">
 							<input type="text" class="form-control">
-						</div> 
+						</div>
 						<button type="submit" class="btn btn-default">
 							搜索
 						</button>
@@ -68,7 +68,7 @@
 						</li>
 					</ul>
 				</div>
-				
+
 			</nav>
 
 			<img src="img/banner-slim.png" class="img-responsive" alt="Responsive image">
@@ -110,12 +110,12 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="table-body">
 					<tr>
 						<td>
 							<span class="label label-default">未完成</span>
 						</td>
-						<td>
+						<td class="number">
 							 1
 						</td>
 						<td>
@@ -135,7 +135,7 @@
 						<td>
 							<span class="label label-success">已完成</span>
 						</td>
-						<td>
+						<td class="number">
 							 2
 						</td>
 						<td>
@@ -180,8 +180,8 @@
 
 			<p class="text-muted">
 				在这里你可以浏览所有的物品需求，并发布自己的需求。
-			</p> 
-			<button type="button" class="btn btn-lg btn-primary" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+			</p>
+			<button type="button" class="btn btn-lg btn-primary" style="width: auto;display: table;margin-left: auto;margin-right: auto;" onclick="addItem()">
 
 				发布需求
 			</button>
@@ -201,5 +201,6 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
+    <script src="js/example.js"></script>
   </body>
 </html>
