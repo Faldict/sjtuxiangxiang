@@ -12,7 +12,7 @@ package main
 import (
 	"database/sql"
 	"log"
-	"net/http"
+	//"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -49,31 +49,22 @@ func register(username string, passwd string, email string) []byte {
 	return []byte("Register successfully")
 }
 
-func login(w http.ResponseWriter, uid string, passwd string) []byte {
+//func login(w http.ResponseWriter, uid string, passwd string) []byte {
+/*
 	db, err := sql.Open("mysql", "user:password@/dbname")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM users WHERE user_ID LIKE %s", uid)
+	var PSD string
+	err = db.QueryRow("SELECT user_PSD FROM users WHERE user_ID=?", uid).Scan(&PSD)
 	if err != nil {
 		log.Fatal(err.Error())
+		return []byte("300002")
 	}
 
-	type data struct {
-		user_ID   string
-		user_PSD  string
-		user_INFO string
-	}
-
-	var tmp data
-	err = rows.Scan(&tmp.user_ID, &tmp.user_PSD, &tmp.user_INFO)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if passwd == tmp.user_PSD {
+	if passwd == PSD {
 		cookie := http.Cookie{
 			Name:   "uid",
 			Value:  uid,
@@ -81,60 +72,34 @@ func login(w http.ResponseWriter, uid string, passwd string) []byte {
 			MaxAge: 86400,
 		}
 		http.SetCookie(w, &cookie)
-
-		db, err := sql.Open("mysql", "user:password@/dbname")
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		defer db.Close() // defer的机制我不是很清楚 所以不知道这里是不是还要open一次
-
-		stmtUpd, err := db.Prepare("UPDATE users SET user_INFO=? WHERE user_ID=?")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer stmtUpd.Close()
-
-		_, err = db.Exec("1", uid) // "1" means true, set "0" when initialize
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		return []byte("Login successfully")
+		return []byte("200000")
 	} else {
-		return []byte("PSD wrong")
+		return []byte("300001")
 	}
-}
+*/
+//}
 
-func logout(w http.ResponseWriter, req http.Request) []byte {
+//func logout(w http.ResponseWriter, req http.Request) []byte {
+/*
 	uid, err := req.Cookie("uid")
 	if err != nil {
 		log.Fatal(err.Error())
 		return []byte("Cookie read error")
 	}
+*/
+//var uid string
+//for _, cookie := range req.Cookies() {
+//	uid = cookie.Name
+//	break
+//}
 
-	db, err := sql.Open("mysql", "user:password@/dbname")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer db.Close()
+//cookie := http.Cookie{
+//	Name:   "uid",
+//	Value:  uid,
+//	Path:   "/",
+//	MaxAge: -1,
+//}
+//http.SetCookie(w, &cookie)
 
-	stmtUpd, err := db.Prepare("UPDATE users SET user_INFO=? WHERE user_ID=?")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmtUpd.Close()
-
-	_, err = db.Exec("0", uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	cookie := http.Cookie{
-		Name:   "uid",
-		Path:   "/",
-		MaxAge: -1,
-	}
-	http.SetCookie(w, &cookie)
-
-	return []byte("Logout successfully")
-}
+//return []byte("Logout successfully")
+//}

@@ -1,9 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"io"
+	"log"
 	"net/http"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func helloController(w http.ResponseWriter, req *http.Request) {
@@ -59,16 +63,68 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 }
 
 func loginUserController(w http.ResponseWriter, req *http.Request) {
+	var rst []byte
 	if req.Method == "POST" {
 		username := req.FormValue("username")
 		passwd := req.FormValue("password")
-		rst := login(w, username, passwd) // 不清楚w和req能不能这样传递
+		//rst := login(w, username, passwd) // 不清楚w和req能不能这样传递
+		db, err := sql.Open("mysql", "user:password@/dbname")
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		defer db.Close()
+
+		var PSD string
+		err = db.QueryRow("SELECT user_PSD FROM users WHERE user_ID=?", username).Scan(&PSD)
+		if err != nil {
+			log.Fatal(err.Error())
+			rst = []byte("300002")
+			goto Here
+		}
+
+		if passwd == PSD {
+			cookie := http.Cookie{
+				Name:   "uid",
+				Value:  username,
+				Path:   "/",
+				MaxAge: 86400,
+			}
+			http.SetCookie(w, &cookie)
+			rst = []byte("200000")
+			goto Here
+		} else {
+			rst = []byte("300001")
+			goto Here
+		}
+	Here:
 		w.Write(rst)
 	}
 }
 
 func logoutUserController(w http.ResponseWriter, req *http.Request) {
-	rst := logout(w, *req) // 感觉有问题
+	//rst := logout(w, *req) 感觉有问题不同这个了
+	/*
+		uid, err := req.Cookie("uid")
+		if err != nil {
+			log.Fatal(err.Error())
+			return []byte("Cookie read error")
+		}
+	*/
+	var uid string
+	for _, cookie := range req.Cookies() {
+		uid = cookie.Name
+		break
+	}
+
+	cookie := http.Cookie{
+		Name:   "uid",
+		Value:  uid,
+		Path:   "/",
+		MaxAge: -1,
+	}
+	http.SetCookie(w, &cookie)
+
+	rst := []byte("Logout successfully")
 	w.Write(rst)
 }
 

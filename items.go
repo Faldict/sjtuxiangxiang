@@ -51,7 +51,7 @@ func userinfo(uid string) []byte {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM INFO_table WHERE user_ID LIKE %s", uid) // 不知道能不能这样用
+	rows, err := db.Query("SELECT * FROM INFO_table WHERE user_ID=?", uid)
 	if err != nil {
 		log.Fatal(err)
 	}
