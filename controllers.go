@@ -64,20 +64,22 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 
 func loginUserController(w http.ResponseWriter, req *http.Request) {
 	var rst []byte
+	var PSD string
 	if req.Method == "POST" {
 		username := req.FormValue("username")
 		passwd := req.FormValue("password")
 		db, err := sql.Open("mysql", "user:password@/dbname")
 		if err != nil {
 			log.Fatal(err.Error())
+			rst = []byte("300001")
+			goto Here
 		}
 		defer db.Close()
 
-		var PSD string
 		err = db.QueryRow("SELECT user_PSD FROM users WHERE user_ID=?", username).Scan(&PSD)
 		if err != nil {
 			log.Fatal(err.Error())
-			rst = []byte("300002") //300002服务器错误
+			rst = []byte("300004") //300002SELECT错误
 			goto Here
 		}
 
@@ -92,7 +94,7 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 			rst = []byte("200000") //200000登录成功
 			goto Here
 		} else {
-			rst = []byte("300001") //300001密码错误
+			rst = []byte("200001") //300001密码错误
 			goto Here
 		}
 	Here:

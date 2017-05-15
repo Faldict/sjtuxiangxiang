@@ -26,34 +26,38 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 	db, err := sql.Open("mysql", "user:password@/database")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300001") //300001OPEN错误
 	}
 	defer db.Close()
 
 	stmtIns, err := db.Prepare("INSERT INTO Items VALUES (?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300002") //prepare错误
 	}
 	defer stmtIns.Close()
 
 	_, err = db.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, use_time) // obj_state is string
 	if err != nil {
 		log.Fatal(err)
-		return []byte("AddItem error")
+		return []byte("300003") //exec错误
 	}
 
-	return []byte("AddItem successfully")
+	return []byte("400000") //400000添加成功
 }
 
 func userinfo(uid string) []byte {
 	db, err := sql.Open("mysql", "user:password@/datebase")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300001")
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM INFO_table WHERE user_ID=?", uid)
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300004")
 	}
 
 	type data struct {
@@ -74,12 +78,13 @@ func userinfo(uid string) []byte {
 		err = rows.Scan(&tmp.uid, &tmp.photo, &tmp.description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.score)
 		if err != nil {
 			log.Fatal(err)
+			return []byte("300005") //读取错误
 		}
 		rst = append(rst, tmp)
 	}
 	b, err := json.Marshal(rst)
 	if err != nil {
-		return []byte("json error")
+		return []byte("600001") // json错误
 	}
 	return b
 }
@@ -88,12 +93,14 @@ func listItem() []byte {
 	db, err := sql.Open("mysql", "user:password@/datebase")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300001")
 	}
 	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Items")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300004")
 	}
 
 	type data struct {
@@ -119,7 +126,7 @@ func listItem() []byte {
 	}
 	b, err := json.Marshal(rst)
 	if err != nil {
-		return []byte("json error")
+		return []byte("600001")
 	}
 	return b
 }
@@ -130,20 +137,22 @@ func shareItem(obj_name string, uid string, obj_price string, obj_info string, u
 	db, err := sql.Open("mysql", "user:password@/database")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300001")
 	}
 	defer db.Close()
 
 	stmtUpd, err := db.Prepare("UPDATE Items SET OBJ_state=? WHERE OBJ_name=? AND UID=?")
 	if err != nil {
 		log.Fatal(err)
+		return []byte("300002")
 	}
 	defer stmtUpd.Close()
 
 	_, err = db.Exec(string(obj_state), obj_name, uid)
 	if err != nil {
 		log.Fatal(err)
-		return []byte("AddItem error")
+		return []byte("300003")
 	}
 
-	return []byte("AddItem successfully")
+	return []byte("500000") //share成功
 }
