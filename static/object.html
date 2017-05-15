@@ -1,12 +1,13 @@
-﻿<html><head><meta charset="utf-8">
+<html><head><meta charset="utf-8">
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>object1</title>
+        <title>瑜伽垫</title>
         <style class="anchorjs"></style>
         <!-- ???????? Bootstrap ???? CSS ??? -->
-        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
         <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
     </head>
     <body>
@@ -21,14 +22,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">SJTUxx</a>
+              <a class="navbar-brand" href="#">交大享享</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="index.html">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="itemlist_available.html">Items</a></li>
+                <li ><a href="index.html">主页 <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="itemlist_wanted.html">物品</a></li>
                 <!-- <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                   <ul class="dropdown-menu">
@@ -46,25 +47,36 @@
                 <div class="form-group">
                   <input type="text" class="form-control" placeholder="Search">
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default">搜索</button>
               </form>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">PersonaInfo </a></li>
-                <li><a href="#">Logout</a></li>
-                <!-- <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                  </ul>
-                </li> -->
+            <li class="dropdown">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的信息<strong class="caret"></strong></a>
+               <!--这里是否可以替换为用户名？-->
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#">个人信息</a>
+                </li>
+                <li>
+                  <a href="#">我的需求</a>
+                </li>
+                <li>
+                  <a href="#">我的出租</a>
+                </li>
+                <li class="divider">
+                </li>
+                <li>
+                  <a href="#">消息</a>
+                </li>
               </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
+            </li>
+            <li>
+              <a href="#">注销</a>
+            </li>
+          </ul>
+        </div>
+        
+      </nav>
 
         <div class="jumbotron" style="
     padding-top: 0px;
@@ -116,7 +128,7 @@
               <dl>
                   <dd>
                       <strong>
-                      <a href="#" title="物品名称" target="_blank">瑜伽垫
+                      <a title="物品名称" target="_blank">瑜伽垫
 </a>
                       </strong>
                   </dd>
@@ -129,9 +141,7 @@
                   <dl>
                       <dt>所有者</dt>
                       <dd>
-                          John
-<a href="//rate.taobao.com/user-rate-7e9db7ad371908ab5772f051b7b814f7.htm" target="_blank">
-                              
+                          admin                           
                                   <i></i>
                               
                                   <i></i>
@@ -149,7 +159,7 @@
                   <dt>发布时间</dt>
                   <dd>
                         
-                      <a class="tb-seller-name" href="//blackleafcn.taobao.com" target="_blank" title="发布时间">2017.5.14</a>
+                      <a class="tb-seller-name" target="_blank" title="发布时间">2017.5.14</a>
                   </dd>
               </dl>
           </div>
@@ -157,7 +167,7 @@
               <dl>
                   <dt>信用评级</dt>
                   <dd>
-                      <span class="ww-light ww-large" data-nick="score" data-tnick="%E5%9D%A4%E5%8F%B6%E7%A7%91%E6%8A%80" data-encode="true"><a href="https://amos.alicdn.com/getcid.aw?v=3&amp;groupid=0&amp;s=1&amp;charset=utf-8&amp;uid=%E5%9D%A4%E5%8F%B6%E7%A7%91%E6%8A%80&amp;site=cntaobao&amp;groupid=0&amp;s=1&amp;fromid=cntaobaosandy57333892" target="_blank" class="ww-inline ww-online" title="根据以往交易记录"><span>★★★★</span></a></span>
+                      <span class="ww-light ww-large" data-nick="score" data-tnick="%E5%9D%A4%E5%8F%B6%E7%A7%91%E6%8A%80" data-encode="true"><a  target="_blank" class="ww-inline ww-online" title="根据以往交易记录"><span>★★★★</span></a></span>
                   </dd>
               </dl>
           </div>
@@ -170,7 +180,7 @@
                       <dt>物品描述</dt>
                       <dd>
                           
-                              <a class="tb-icon tb-icon-alipay-persion-auth" href="//help.alipay.com/lab/210120-210321/0-210321.htm" target="_blank" title="֧����������֤2013-11-07" data-spm="d12"></a>
+                              <a class="tb-icon tb-icon-alipay-persion-auth" target="_blank" title="֧����������֤2013-11-07" data-spm="d12"></a>
                           
                               <a class="tb-seller-bail" target="_blank" title="物主添加的描述">
                                   <span class="tb-icon tb-icon-bail"></span>
