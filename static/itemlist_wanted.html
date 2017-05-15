@@ -18,12 +18,12 @@
 		<div class="col-md-12">
 			<nav class="navbar navbar-default" role="navigation">
 				<div class="navbar-header">
-					 
+
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
 					</button> <a class="navbar-brand" href="#">交大享享</a>
 				</div>
-				
+
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
@@ -36,7 +36,7 @@
 					<form class="navbar-form navbar-left" role="search">
 						<div class="form-group">
 							<input type="text" class="form-control">
-						</div> 
+						</div>
 						<button type="submit" class="btn btn-default">
 							搜索
 						</button>
@@ -68,7 +68,7 @@
 						</li>
 					</ul>
 				</div>
-				
+
 			</nav>
 
 			<img src="img/banner-slim.png" class="img-responsive" alt="Responsive image">
@@ -110,19 +110,19 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="table-body">
 					<tr>
 						<td>
 							<span class="label label-default">未完成</span>
 						</td>
-						<td>
+						<td class="number">
 							 1
 						</td>
 						<td>
 							求借单反相机进行社团活动拍摄
 						</td>
 						<td>
-							2017.1.1~2017.1.2
+							2017-05-21至2017-06-22
 						</td>
 						<td>
 							admin
@@ -135,14 +135,14 @@
 						<td>
 							<span class="label label-success">已完成</span>
 						</td>
-						<td>
+						<td class="number">
 							 2
 						</td>
 						<td>
 							求借收音机
 						</td>
 						<td>
-							2017.1.1~2017.1.2
+							2017-05-01至2017-05-02
 						</td>
 						<td>
 							admin
@@ -180,7 +180,7 @@
 
 			<p class="text-muted">
 				在这里你可以浏览所有的物品需求，并发布自己的需求。
-			</p> 
+			</p>
 			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#uploadrequest" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
 			  发布需求
 			</button>
@@ -206,16 +206,16 @@
         <h4 class="modal-title" id="myModalLabel">发布需求</h4>
       </div>
       <div class="modal-body">
-						<form role="form">
+						<form role="form" name="request">
 							<div class="form-group">
-								 
+
 								<label for="requesttitle">
 									需求标题
 								</label>
-								<input type="text" class="form-control" id="requesttitle" />
+								<input type="text" class="form-control" id="requesttitle" name="request-title" />
 							</div>
 							<div class="form-group">
-								 
+
 								<label for="exampleInputPassword1">
 									租借价格
 								</label>
@@ -223,41 +223,41 @@
 							<div class="col-md-6">
 							<div class="input-group">
 							  <span class="input-group-addon">¥</span>
-							  <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="与出借人协商，请输入0">
+							  <input type="text" class="form-control" name="request-price" aria-label="Amount (to the nearest dollar)" placeholder="与出借人协商，请输入0">
 							</div>
 							</div>
 							<div class="col-md-6">
 									<div class="radio">
 									<label>
-										<input type="radio" /> /天
+										<input type="radio" name="request-days" /> /天
 									</label>
 									<label>
-										<input type="radio" /> /次
+										<input type="radio" name="request-times" /> /次
 									</label>
 									<label>
-										<input type="radio" /> 与出借人协商
+										<input type="radio" name="request-xieshang" /> 与出借人协商
 									</label>
-									</div> 
+									</div>
 							</div>
 							<div class="form-group">
 												<label>
 									详细内容
 								</label>
-							<textarea class="form-control" rows="5"></textarea></br>
+							<textarea class="form-control" rows="5" name="request-content"></textarea></br>
 								<label>
 									有效日期
 								</label>
 								<!-- 这里需要js控件，还未实现 -->
 							</div>
-				<form action="" class="form-horizontal"  role="form">
+				<form action="" name="request" class="form-horizontal"  role="form">
 			        <fieldset>
 						<div class="form-group">
-			                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy MM dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+			                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy MM dd" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
 			                    <input class="form-control" size="16" type="text" value="" readonly>
 			                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 			                </div>
-							<input type="hidden" id="dtp_input2" value="" /><br/>
+							<input type="hidden" id="dtp_input1" value="" /><br/>
 			            </div>
 
 						<p>至</p>
@@ -284,7 +284,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">发布</button>
+        <button type="button" class="btn btn-primary" onclick="addItem()">发布</button>
       </div>
     </div>
   </div>
@@ -300,6 +300,7 @@
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/example.js"></script>
 <script type="text/javascript">
     $('.form_datetime').datetimepicker({
         //language:  'fr',
