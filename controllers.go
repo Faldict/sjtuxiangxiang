@@ -15,7 +15,7 @@ func helloController(w http.ResponseWriter, req *http.Request) {
 }
 
 func NotFound(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "No find!\n")
+	io.WriteString(w, "404 Not Found")
 }
 
 func userController(w http.ResponseWriter, req *http.Request) {
@@ -67,7 +67,6 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		username := req.FormValue("username")
 		passwd := req.FormValue("password")
-		//rst := login(w, username, passwd) // 不清楚w和req能不能这样传递
 		db, err := sql.Open("mysql", "user:password@/dbname")
 		if err != nil {
 			log.Fatal(err.Error())
@@ -78,7 +77,7 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 		err = db.QueryRow("SELECT user_PSD FROM users WHERE user_ID=?", username).Scan(&PSD)
 		if err != nil {
 			log.Fatal(err.Error())
-			rst = []byte("300002")
+			rst = []byte("300002") //300002服务器错误
 			goto Here
 		}
 
@@ -90,10 +89,10 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 				MaxAge: 86400,
 			}
 			http.SetCookie(w, &cookie)
-			rst = []byte("200000")
+			rst = []byte("200000") //200000登录成功
 			goto Here
 		} else {
-			rst = []byte("300001")
+			rst = []byte("300001") //300001密码错误
 			goto Here
 		}
 	Here:
@@ -102,43 +101,47 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 }
 
 func logoutUserController(w http.ResponseWriter, req *http.Request) {
-	//rst := logout(w, *req) 感觉有问题不同这个了
-	/*
-		uid, err := req.Cookie("uid")
-		if err != nil {
-			log.Fatal(err.Error())
-			return []byte("Cookie read error")
-		}
-	*/
-	var uid string
-	for _, cookie := range req.Cookies() {
-		uid = cookie.Name
-		break
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
 	}
-
+	uid := cookie_read.Value
 	cookie := http.Cookie{
 		Name:   "uid",
-		Value:  uid,
 		Path:   "/",
 		MaxAge: -1,
 	}
 	http.SetCookie(w, &cookie)
 
-	rst := []byte("Logout successfully")
+	rst := []byte(uid + ":300000") //300000注销成功
 	w.Write(rst)
 }
 
 func infoUserController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value
 	if req.Method == "POST" {
-		uid := req.FormValue("uid")
 		info := userinfo(uid)
 		w.Write(info)
 	}
 }
 
 func addItemController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value
 	if req.Method == "POST" {
-		uid := req.FormValue("uid")
 		obj_name := req.FormValue("obj_name")
 		obj_price := req.FormValue("obj_price")
 		obj_info := req.FormValue("obj_info")
