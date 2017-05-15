@@ -1,6 +1,4 @@
 # sjtuxiangxiang
-[![Magnum CI](https://img.shields.io/magnumci/ci/96ffb83fa700f069024921b0702e76ff.svg)]()
-[![label](https://img.shields.io/github/issues-raw/badges/shields/website.svg)]()
 [![label](https://img.shields.io/badge/SJTU-SEIEE-blue.svg)]()
 [![label](https://img.shields.io/badge/SJTU-IEEE-brightgreen.svg)]()
 
@@ -22,10 +20,11 @@ $ cd sjtuxiangxiang
 If you have installed [golang build tools](http://golangtc.com/download), you can directly run the command:
 
 ```
-$ go run main.go
+$ ./run.sh
 ```
 
-Otherwise, I have pre-built and uploaded an execute bin. You may run this command:
+Otherwise, I have pre-built and uploaded an execute bin. You can download a pre-build
+binary file and may run this command:
 
 ```
 $ ./main
@@ -37,5 +36,6 @@ If you are windows user, you should follow above steps and run the similar comma
 
 ## Code Structure
 
-I have only written 3 lines backend, and a hello-world front-end. The backend is organized by `main.go` while the front-end
+I have only written 3 lines backend, and a hello-world front-end. The backend is
+organized by `main.go` while the front-end
 is in the static file folder.
