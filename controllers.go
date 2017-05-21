@@ -36,6 +36,22 @@ func userController(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func messageController(w http.ResponseWriter, req *http.Request) {
+	path := req.URL.EscapedPath()
+	method := strings.Split(path, "/")[2]
+
+	switch method {
+	case "send":
+		sendMessageController(w, req)
+	case "receive":
+		receiveMessageController(w, req)
+	case "listMessage":
+		listMessageController(w, req)
+	default:
+		NotFound(w, req)
+	}
+}
+
 func itemController(w http.ResponseWriter, req *http.Request) {
 	path := req.URL.EscapedPath()
 	method := strings.Split(path, "/")[2]
@@ -43,10 +59,12 @@ func itemController(w http.ResponseWriter, req *http.Request) {
 	switch method {
 	case "add":
 		addItemController(w, req)
-	case "list":
+	case "listItem":
 		listItemController(w, req)
-	case "share":
-		shareItemController(w, req)
+	case "shareRequest":
+		shareRequestController(w, req)
+	case "shareResponse":
+		shareResponseController(w, req)
 	default:
 		NotFound(w, req)
 	}
@@ -160,14 +178,85 @@ func listItemController(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func shareItemController(w http.ResponseWriter, req *http.Request) {
+func shareRequestController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid_request := cookie_read.Value
 	if req.Method == "POST" {
-		uid := req.FormValue("uid")
+		uid_response := req.FormValue("uid_response")
 		obj_name := req.FormValue("obj_name")
 		obj_price := req.FormValue("obj_price")
 		obj_info := req.FormValue("obj_info")
 		use_time := req.FormValue("use_time")
-		rst := shareItem(obj_name, uid, obj_price, obj_info, use_time)
+		rst := shareRequest(uid_request, uid_response, obj_name, obj_price, obj_info, use_time)
+		w.Write(rst)
+	}
+}
+
+func shareResponseController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid_response := cookie_read.Value
+	if req.Method == "POST" {
+		uid_request := req.FormValue("uid_request")
+		obj_name := req.FormValue("obj_name")
+		obj_price := req.FormValue("obj_price")
+		obj_info := req.FormValue("obj_info")
+		use_time := req.FormValue("use_time")
+		agree := req.FormValue("agree")
+		rst := shareResponse(uid_request, uid_response, obj_name, obj_price, obj_info, use_time, agree)
+		w.Write(rst)
+	}
+}
+
+func sendMessageController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	from := cookie_read.Value
+	if req.Method == "POST" {
+		content := req.FormValue("content")
+		to := req.FormValue("to")
+		rst := sendMessage(content, from, to)
+		w.Write(rst)
+	}
+}
+
+func receiveMessageController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value
+	if req.Method == "GET" {
+		rst := receiveMessage(uid)
+		w.Write(rst)
+	}
+}
+
+func listMessageController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value
+	if req.Method == "GET" {
+		rst := listMessage(uid)
 		w.Write(rst)
 	}
 }

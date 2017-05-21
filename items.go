@@ -1,6 +1,5 @@
 // Items.go
-// Author : Faldict
-// Date : 2017-05-02
+// Author : Faldict/cmc_iris
 package main
 
 import (
@@ -17,6 +16,12 @@ const (
 	IN_TRADE
 	NOT_IN_TRADE
 	TIME_OUT
+)
+
+const (
+	NOT_SUCCESS = iota
+	SUCCESS
+	UNDEFINE
 )
 
 func addItem(obj_name string, uid string, obj_price string, obj_info string, use_time string) []byte {
@@ -37,7 +42,7 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 	}
 	defer stmtIns.Close()
 
-	_, err = db.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, use_time) // obj_state is string
+	_, err = stmtIns.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, use_time) // obj_state is string
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003") //exec错误
@@ -131,27 +136,86 @@ func listItem() []byte {
 	return b
 }
 
-func shareItem(obj_name string, uid string, obj_price string, obj_info string, use_time string) []byte {
-	obj_state := NOT_IN_TRADE
+func shareRequest(uid_request string, uid_response string, obj_name string, obj_price string, obj_info string, use_time string) []byte {
+	handle := "0"
+
+	db, err := sql.Open("mysql", "user:password@/database")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001") //300001OPEN错误
+	}
+
+	stmtIns, err := db.Prepare("INSERT INTO ShareRequests VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300002") //prepare错误
+	}
+
+	_, err = stmtIns.Exec(uid_request, uid_response, obj_name, obj_price, obj_info, use_time, handle, string(UNDEFINE)) // obj_state is string
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300003") //exec错误
+	}
+
+	return []byte("400000") //400000添加成功
+}
+
+func shareResponse(uid_request string, uid_response string, obj_name string, obj_price string, obj_info string, use_time string, agree string) []byte {
 
 	db, err := sql.Open("mysql", "user:password@/database")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")
 	}
-	defer db.Close()
 
-	stmtUpd, err := db.Prepare("UPDATE Items SET OBJ_state=? WHERE OBJ_name=? AND UID=?")
+	stmtUpd1, err := db.Prepare("UPDATE ShareRequests SET handle=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300002")
 	}
-	defer stmtUpd.Close()
 
-	_, err = db.Exec(string(obj_state), obj_name, uid)
+	_, err = stmtUpd1.Exec("1", obj_name, uid_request, uid_response)
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003")
+	}
+
+	if agree == "1" {
+		stmtUpd2, err := db.Prepare("UPDATE ShareRequests SET success=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300002")
+		}
+
+		_, err = stmtUpd2.Exec(string(SUCCESS), obj_name, uid_request, uid_response)
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300003")
+		}
+
+		stmtUpd3, err := db.Prepare("UPDATE Items SET OBJ_state=? WHERE OBJ_name=? AND UID=?")
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300002")
+		}
+
+		_, err = stmtUpd3.Exec(string(NOT_IN_TRADE), obj_name, uid_response)
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300003")
+		}
+	} else {
+		stmtUpd2, err := db.Prepare("UPDATE ShareRequests SET success=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300002")
+		}
+
+		_, err = stmtUpd2.Exec(string(NOT_SUCCESS), obj_name, uid_request, uid_response)
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300003")
+		}
 	}
 
 	return []byte("500000") //share成功
