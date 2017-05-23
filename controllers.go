@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -140,6 +142,9 @@ func logoutUserController(w http.ResponseWriter, req *http.Request) {
 }
 
 func infoUserController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	cookie_read, err := req.Cookie("uid")
 	if err != nil {
 		log.Fatal(err.Error())
@@ -149,7 +154,12 @@ func infoUserController(w http.ResponseWriter, req *http.Request) {
 	uid := cookie_read.Value
 	if req.Method == "POST" {
 		info := userinfo(uid)
-		w.Write(info)
+		commentData, err := json.MarshalIndent(info, "", "    ")
+		if err != nil {
+			w.Write([]byte("600001"))
+			return
+		}
+		io.Copy(w, bytes.NewReader(commentData))
 	}
 }
 
@@ -172,9 +182,17 @@ func addItemController(w http.ResponseWriter, req *http.Request) {
 }
 
 func listItemController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if req.Method == "GET" {
 		rst := listItem()
-		w.Write(rst)
+		commentData, err := json.MarshalIndent(rst, "", "    ")
+		if err != nil {
+			w.Write([]byte("600001"))
+			return
+		}
+		io.Copy(w, bytes.NewReader(commentData))
 	}
 }
 
@@ -234,6 +252,9 @@ func sendMessageController(w http.ResponseWriter, req *http.Request) {
 }
 
 func receiveMessageController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	cookie_read, err := req.Cookie("uid")
 	if err != nil {
 		log.Fatal(err.Error())
@@ -243,11 +264,19 @@ func receiveMessageController(w http.ResponseWriter, req *http.Request) {
 	uid := cookie_read.Value
 	if req.Method == "GET" {
 		rst := receiveMessage(uid)
-		w.Write(rst)
+		commentData, err := json.MarshalIndent(rst, "", "    ")
+		if err != nil {
+			w.Write([]byte("600001"))
+			return
+		}
+		io.Copy(w, bytes.NewReader(commentData))
 	}
 }
 
 func listMessageController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	cookie_read, err := req.Cookie("uid")
 	if err != nil {
 		log.Fatal(err.Error())
@@ -257,6 +286,11 @@ func listMessageController(w http.ResponseWriter, req *http.Request) {
 	uid := cookie_read.Value
 	if req.Method == "GET" {
 		rst := listMessage(uid)
-		w.Write(rst)
+		commentData, err := json.MarshalIndent(rst, "", "    ")
+		if err != nil {
+			w.Write([]byte("600001"))
+			return
+		}
+		io.Copy(w, bytes.NewReader(commentData))
 	}
 }
