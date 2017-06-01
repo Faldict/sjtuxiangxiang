@@ -9,8 +9,8 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-        <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-
+    <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="js/item.js" charset="UTF-8"></script>
 
   </head>
   <body>
@@ -90,7 +90,7 @@
 <div class="row">
   <div class="col-md-8">
 
-  <div class="row">
+  <div class="row" id="itemlist">
 
   <div class="col-md-4">
     <div class="thumbnail">
@@ -155,7 +155,7 @@
 
 			<p class="text-muted">
 				在这里你可以浏览所有的可出租物品，并发布自己的物品。
-			</p> 
+			</p>
 			<button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#uploaditem" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
 			  发布物品
 			</button>
@@ -186,14 +186,14 @@
       <div class="modal-body">
 							<form role="form">
 								<div class="form-group">
-									 
+
 									<label for="requesttitle">
 										物品名称
 									</label>
 									<input type="text" class="form-control" id="requesttitle" />
 								</div>
 								<div class="form-group">
-									 
+
 									<label for="exampleInputPassword1">
 										租借价格
 									</label>
@@ -215,7 +215,7 @@
 										<label>
 											<input type="radio" /> 与租借人协商
 										</label>
-										</div> 
+										</div>
 								</div>
 								<div class="form-group">
 													<label>
@@ -225,7 +225,7 @@
 									<label>
 										有效日期
 									</label>
-								</div>				
+								</div>
 
 				    <form action="" class="form-horizontal"  role="form">
 				        <fieldset>
@@ -255,7 +255,7 @@
 				    </form>
 
 								<div class="form-group">
-									 
+
 									<label for="exampleInputFile">
 										上传物品图片
 									</label>
