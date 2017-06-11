@@ -66,13 +66,14 @@ func userinfo(uid string) []byte {
 	}
 
 	type data struct {
-		uid                string
-		photo              string // should be jpeg 喵喵喵？
+		uid string
+		// photo
 		description        string
 		Age                string
 		RelationshipStatus string // {single, inlove}
 		Jaccount           string
 		score              string
+		num                string
 	}
 
 	var tmp data
@@ -80,7 +81,7 @@ func userinfo(uid string) []byte {
 
 	for rows.Next() {
 		rows.Columns()
-		err = rows.Scan(&tmp.uid, &tmp.photo, &tmp.description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.score)
+		err = rows.Scan(&tmp.uid, &tmp.description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.score, &tmp.num)
 		if err != nil {
 			log.Fatal(err)
 			return []byte("300005") //读取错误
@@ -219,4 +220,54 @@ func shareResponse(uid_request string, uid_response string, obj_name string, obj
 	}
 
 	return []byte("500000") //share成功
+}
+
+func updateScore(obj_uid string, obj_score int) []byte {
+	var cur_score, cur_num, new_score int
+	db, err := sql.Open("mysql", "user:password@/dbname")
+	if err != nil {
+		log.Fatal(err.Error())
+		rst := []byte("300001")
+	}
+	defer db.Close()
+
+	err = db.QueryRow("SELECT score FROM INFO_table WHERE user_ID=?", obj_uid).Scan(&cur_score)
+	if err != nil {
+		log.Fatal(err.Error())
+		rst := []byte("300004") //300002SELECT错误
+	} //取当前得分
+
+	err = db.QueryRow("SELECT num FROM INFO_table WHERE user_ID=?", obj_uid).Scan(&cur_num)
+	if err != nil {
+		log.Fatal(err.Error())
+		rst := []byte("300004") //300002SELECT错误
+	} //取当前评价人数
+
+	new_score = (cur_score*cur_num + obj_score) / (cur_num + 1) //计算新得分
+
+	stmtUpd1, err := db.Prepare("UPDATE INFO_table SET score=? WHERE user_ID=?")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300002")
+	}
+
+	_, err = stmtUpd1.Exec(new_score, obj_uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300003")
+	} //更新得分
+
+	stmtUpd2, err := db.Prepare("UPDATE INFO_table SET num=? WHERE user_ID=?")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300002")
+	}
+
+	_, err = stmtUpd2.Exec(cur_num+1, obj_uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300003")
+	} //评价人数+1
+
+	return []byte("评价成功")
 }

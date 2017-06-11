@@ -67,6 +67,8 @@ func itemController(w http.ResponseWriter, req *http.Request) {
 		shareRequestController(w, req)
 	case "shareResponse":
 		shareResponseController(w, req)
+	case "updateScore":
+		updateScoreController(w, req)
 	default:
 		NotFound(w, req)
 	}
@@ -77,7 +79,13 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 		username := req.FormValue("username")
 		passwd := req.FormValue("password")
 		email := req.FormValue("email")
-		rst := register(username, passwd, email)
+		//need more userInfo
+		description := req.FormValue("description")
+		Age := req.FormValue("Age")
+		RelationStatus := req.FormValue("RelationStatus")
+		Jaccount := req.FormValue("Jaccount")
+		score := -1
+		rst := register(username, passwd, email, description, Age, RelationStatus, Jaccount, score)
 		w.Write(rst)
 	}
 }
@@ -292,5 +300,21 @@ func listMessageController(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		io.Copy(w, bytes.NewReader(commentData))
+	}
+}
+
+func updateScoreController(w http.ResponseWriter, req *http.Request) {
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value //要登陆才能评价
+	if req.Method == "POST" {
+		obj_uid := req.FormValue("obj_uid")
+		obj_score := req.FormValue("obj_score")
+		rst := updateScore(obj_uid, obj_score)
+		w.Write(rst)
 	}
 }
