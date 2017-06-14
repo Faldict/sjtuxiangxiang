@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
+	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -222,28 +223,47 @@ func shareResponse(uid_request string, uid_response string, obj_name string, obj
 	return []byte("500000") //share成功
 }
 
-func updateScore(obj_uid string, obj_score int) []byte {
-	var cur_score, cur_num, new_score int
+func updateScore(obj_uid string, obj_score string) []byte {
+	var cur_score, cur_num, new_score, new_num string
+	var cscore, cnum, oscore, nscore, nnum int
 	db, err := sql.Open("mysql", "user:password@/dbname")
 	if err != nil {
 		log.Fatal(err.Error())
-		rst := []byte("300001")
+		return []byte("300001")
 	}
 	defer db.Close()
 
 	err = db.QueryRow("SELECT score FROM INFO_table WHERE user_ID=?", obj_uid).Scan(&cur_score)
 	if err != nil {
 		log.Fatal(err.Error())
-		rst := []byte("300004") //300002SELECT错误
+		return []byte("300004") //300002SELECT错误
 	} //取当前得分
 
 	err = db.QueryRow("SELECT num FROM INFO_table WHERE user_ID=?", obj_uid).Scan(&cur_num)
 	if err != nil {
 		log.Fatal(err.Error())
-		rst := []byte("300004") //300002SELECT错误
+		return []byte("300004") //300002SELECT错误
 	} //取当前评价人数
 
-	new_score = (cur_score*cur_num + obj_score) / (cur_num + 1) //计算新得分
+	cscore, err = strconv.Atoi(cur_score)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("字符串转换成整数失败")
+	}
+	cnum, err = strconv.Atoi(cur_num)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("字符串转换成整数失败")
+	}
+	oscore, err = strconv.Atoi(obj_score)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("字符串转换成整数失败")
+	}
+	nnum = cnum + 1
+	nscore = (cscore*cnum + oscore) / (cnum + 1) //计算新得分
+	new_score = strconv.Itoa(nscore)
+	new_num = strconv.Itoa(nnum)
 
 	stmtUpd1, err := db.Prepare("UPDATE INFO_table SET score=? WHERE user_ID=?")
 	if err != nil {
@@ -263,7 +283,7 @@ func updateScore(obj_uid string, obj_score int) []byte {
 		return []byte("300002")
 	}
 
-	_, err = stmtUpd2.Exec(cur_num+1, obj_uid)
+	_, err = stmtUpd2.Exec(new_num, obj_uid)
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003")

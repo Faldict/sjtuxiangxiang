@@ -24,7 +24,7 @@ import (
 //     DB_PASSWD = ""
 // )
 
-func register(username string, passwd string, email string, description string, Age string, RelationStatus string, Jaccount string, score int) []byte {
+func register(username string, passwd string, email string, description string, Age string, RelationStatus string, Jaccount string) []byte {
 	// TODO
 	db, err := sql.Open("mysql", "user:password@/dbname")
 	if err != nil {
@@ -52,7 +52,10 @@ func register(username string, passwd string, email string, description string, 
 	}
 	defer stmtIns.Close()
 
-	_, err = stmtIns2.Exec(username, description, Age, RelationStatus, Jaccount, score, 0) // Insert tuples (i, i^2)
+	var score, num string
+	score = "50"
+	num = "0"
+	_, err = stmtIns2.Exec(username, description, Age, RelationStatus, Jaccount, score, num) // Insert tuples (i, i^2)
 	if err != nil {
 		log.Fatal(err.Error())
 		return []byte("Register Error")

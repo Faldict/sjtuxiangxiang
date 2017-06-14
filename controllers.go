@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -84,8 +85,7 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 		Age := req.FormValue("Age")
 		RelationStatus := req.FormValue("RelationStatus")
 		Jaccount := req.FormValue("Jaccount")
-		score := -1
-		rst := register(username, passwd, email, description, Age, RelationStatus, Jaccount, score)
+		rst := register(username, passwd, email, description, Age, RelationStatus, Jaccount)
 		w.Write(rst)
 	}
 }
@@ -311,6 +311,7 @@ func updateScoreController(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	uid := cookie_read.Value //要登陆才能评价
+	fmt.Println(uid)
 	if req.Method == "POST" {
 		obj_uid := req.FormValue("obj_uid")
 		obj_score := req.FormValue("obj_score")
