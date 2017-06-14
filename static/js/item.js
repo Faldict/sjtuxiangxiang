@@ -7,6 +7,7 @@
 // ---------------------------------------
 
 // String.format
+// seemed to be useless
 String.prototype.format = function() {
   var args = arguments;
   return this.replace(/\{(\d+)\}/g,function(s,i){
@@ -16,7 +17,35 @@ String.prototype.format = function() {
 
 // user add an item
 function addItem() {
-
+    // define segments
+    var number = document.getElementsByClassName('number').length + 1;
+    var myForm = document.forms[1];
+    var title = myForm["request-title"].value;
+    var price = myForm["request-price"].value;
+    var perday = myForm["request-days"].value;
+    var pertime = myForm["request-times"].value;
+    var content = myForm["request-content"].value;
+    var date1 = document.getElementById('dtp_input1').value;
+    var date2 = document.getElementById('dtp_input2').value;
+    // hide modal
+    $('#uploadrequest').modal('hide');
+    // call api via ajax
+    var uri = "/items/add";
+    $.post(uri, {
+            "obj_name" : title,
+            "obj_price" : price,
+            "info" : content,
+            // "use_time" : date1,
+            "start_time" : date1,
+            "end_time" : date2
+        }, function (status) {
+            if (status == "100000") {
+                alert("Upload Success!");
+            } else {
+                alert("Upload Failed! Try it later!");
+            }
+        }
+    );  
 }
 
 // Get Item List

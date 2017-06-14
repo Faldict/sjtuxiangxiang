@@ -183,8 +183,10 @@ func addItemController(w http.ResponseWriter, req *http.Request) {
 		obj_name := req.FormValue("obj_name")
 		obj_price := req.FormValue("obj_price")
 		obj_info := req.FormValue("obj_info")
-		use_time := req.FormValue("use_time")
-		rst := addItem(obj_name, uid, obj_price, obj_info, use_time)
+		// use_time := req.FormValue("use_time")
+		start_time := req.FormValue("start_time")
+		end_time := req.FormValue("end_time")
+		rst := addItem(obj_name, uid, obj_price, obj_info, start_time, end_time)
 		w.Write(rst)
 	}
 }

@@ -25,7 +25,7 @@ const (
 	UNDEFINE
 )
 
-func addItem(obj_name string, uid string, obj_price string, obj_info string, use_time string) []byte {
+func addItem(obj_name string, uid string, obj_price string, obj_info string, start_time string, end_time string) []byte {
 	upload_time := time.Now()
 	obj_state := IN_TRADE
 
@@ -36,20 +36,20 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 	}
 	defer db.Close()
 
-	stmtIns, err := db.Prepare("INSERT INTO Items VALUES (?, ?, ?, ?, ?, ?, ?)")
+	stmtIns, err := db.Prepare("INSERT INTO Items VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300002") //prepare错误
 	}
 	defer stmtIns.Close()
 
-	_, err = stmtIns.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, use_time) // obj_state is string
+	_, err = stmtIns.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, start_time, end_time) // obj_state is string
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003") //exec错误
 	}
 
-	return []byte("400000") //400000添加成功
+	return []byte("100000") // 100000添加成功
 }
 
 func userinfo(uid string) []byte {
