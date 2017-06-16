@@ -286,3 +286,31 @@ func updateScore(obj_uid string, obj_score string) []byte {
 
 	return []byte("400000")
 }
+
+func itemInfo(obj_id string) []byte {
+	db, err := sql.Open("mysql", "user:password@/dbname")
+	if err != nil {
+		log.Fatal(err.Error())
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	type data struct {
+		obj_name    string
+		uploader    string
+		upload_time string
+		obj_price   string // it need to be a string
+		obj_info    string
+		use_time    string
+		score       string
+	}
+	var result data
+	err := db.QueryRow("SELECT Uploader, UploadTime, OBJ_price, OBJ_INFO, OBJ_usetime FROM Items WHERE OBJ_name = ？", obj_id).Scan(&result.uploader, &result.upload_time, &result.obj_price, &result.obj_info, &result.use_time)
+	err := db.QueryRow("SELECT score FROM INFO WHERE user_ID = ?", uploader).Scan(&result.score)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300002")
+	}
+	result.obj_name = obj_id
+	return json.Marshal(result)
+}
