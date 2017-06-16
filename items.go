@@ -19,13 +19,7 @@ const (
 	TIME_OUT
 )
 
-const (
-	NOT_SUCCESS = iota
-	SUCCESS
-	UNDEFINE
-)
-
-func addItem(obj_name string, uid string, obj_price string, obj_info string, start_time string, end_time string) []byte {
+func addItem(obj_name string, uid string, obj_price string, obj_info string, use_time string, typ string) []byte {
 	upload_time := time.Now()
 	obj_state := IN_TRADE
 
@@ -43,13 +37,13 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, sta
 	}
 	defer stmtIns.Close()
 
-	_, err = stmtIns.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, start_time, end_time) // obj_state is string
+	_, err = stmtIns.Exec(obj_name, uid, upload_time, string(obj_state), obj_price, obj_info, use_time, typ) // obj_state is string
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003") //exec错误
 	}
 
-	return []byte("100000") // 100000添加成功
+	return []byte("400000") //400000添加成功
 }
 
 func userinfo(uid string) []byte {
@@ -96,7 +90,7 @@ func userinfo(uid string) []byte {
 	return b
 }
 
-func listItem() []byte {
+func listItem(typ string) []byte {
 	db, err := sql.Open("mysql", "user:password@/datebase")
 	if err != nil {
 		log.Fatal(err)
@@ -104,7 +98,7 @@ func listItem() []byte {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM Items")
+	rows, err := db.Query("SELECT * FROM Items WHERE obj_type = ?", typ)
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300004")
@@ -138,22 +132,24 @@ func listItem() []byte {
 	return b
 }
 
-func shareRequest(uid_request string, uid_response string, obj_name string, obj_price string, obj_info string, use_time string) []byte {
-	handle := "0"
+func shareRequest(uid_request string, uid_response string, obj_name string) []byte {
+	upload_time := time.Now()
 
 	db, err := sql.Open("mysql", "user:password@/database")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001") //300001OPEN错误
 	}
+	defer db.Close()
 
-	stmtIns, err := db.Prepare("INSERT INTO ShareRequests VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+	stmtIns, err := db.Prepare("INSERT INTO ShareRequests VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300002") //prepare错误
 	}
+	defer stmtIns.Close()
 
-	_, err = stmtIns.Exec(uid_request, uid_response, obj_name, obj_price, obj_info, use_time, handle, string(UNDEFINE)) // obj_state is string
+	_, err = stmtIns.Exec(uid_request, uid_response, obj_name, "0", upload_time) // obj_state is string
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003") //exec错误
@@ -162,58 +158,55 @@ func shareRequest(uid_request string, uid_response string, obj_name string, obj_
 	return []byte("400000") //400000添加成功
 }
 
-func shareResponse(uid_request string, uid_response string, obj_name string, obj_price string, obj_info string, use_time string, agree string) []byte {
+func shareResponse(uid_request string, uid_response string, obj_name string, agree string) []byte {
+
+	var count string
+	var cnt int
 
 	db, err := sql.Open("mysql", "user:password@/database")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")
 	}
+	defer db.Close()
 
-	stmtUpd1, err := db.Prepare("UPDATE ShareRequests SET handle=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
+	err = db.QueryRow("SELECT cnt FROM ShareRequests WHERE OBJ_name=? AND uid_request=? AND uid_response=?", obj_name, uid_request, uid_response).Scan(&count)
 	if err != nil {
-		log.Fatal(err)
-		return []byte("300002")
+		log.Fatal(err.Error())
+		return []byte("300004") //300002SELECT错误
 	}
 
-	_, err = stmtUpd1.Exec("1", obj_name, uid_request, uid_response)
+	cnt, err = strconv.Atoi(count)
 	if err != nil {
 		log.Fatal(err)
-		return []byte("300003")
+		return []byte("500001")
 	}
 
 	if agree == "1" {
-		stmtUpd2, err := db.Prepare("UPDATE ShareRequests SET success=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
+		cnt = cnt + 1
+		count = strconv.Itoa(cnt)
+		stmtUpd1, err := db.Prepare("UPDATE ShareRequests SET cnt=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
 		if err != nil {
 			log.Fatal(err)
 			return []byte("300002")
 		}
+		defer stmtUpd1.Close()
 
-		_, err = stmtUpd2.Exec(string(SUCCESS), obj_name, uid_request, uid_response)
+		_, err = stmtUpd1.Exec(count, obj_name, uid_request, uid_response)
 		if err != nil {
 			log.Fatal(err)
 			return []byte("300003")
 		}
-
-		stmtUpd3, err := db.Prepare("UPDATE Items SET OBJ_state=? WHERE OBJ_name=? AND UID=?")
+	}
+	if cnt == 2 {
+		stmtUpd2, err := db.Prepare("UPDATE Items SET OBJ_state=? WHERE OBJ_name=? AND UID=?")
 		if err != nil {
 			log.Fatal(err)
 			return []byte("300002")
 		}
+		defer stmtUpd2.Close()
 
-		_, err = stmtUpd3.Exec(string(NOT_IN_TRADE), obj_name, uid_response)
-		if err != nil {
-			log.Fatal(err)
-			return []byte("300003")
-		}
-	} else {
-		stmtUpd2, err := db.Prepare("UPDATE ShareRequests SET success=? WHERE OBJ_name=? AND uid_request=? AND uid_response=?")
-		if err != nil {
-			log.Fatal(err)
-			return []byte("300002")
-		}
-
-		_, err = stmtUpd2.Exec(string(NOT_SUCCESS), obj_name, uid_request, uid_response)
+		_, err = stmtUpd2.Exec(string(NOT_IN_TRADE), obj_name, uid_response)
 		if err != nil {
 			log.Fatal(err)
 			return []byte("300003")
@@ -248,17 +241,17 @@ func updateScore(obj_uid string, obj_score string) []byte {
 	cscore, err = strconv.Atoi(cur_score)
 	if err != nil {
 		log.Fatal(err)
-		return []byte("字符串转换成整数失败")
+		return []byte("500001")
 	}
 	cnum, err = strconv.Atoi(cur_num)
 	if err != nil {
 		log.Fatal(err)
-		return []byte("字符串转换成整数失败")
+		return []byte("500001")
 	}
 	oscore, err = strconv.Atoi(obj_score)
 	if err != nil {
 		log.Fatal(err)
-		return []byte("字符串转换成整数失败")
+		return []byte("500001")
 	}
 	nnum = cnum + 1
 	nscore = (cscore*cnum + oscore) / (cnum + 1) //计算新得分
@@ -270,6 +263,7 @@ func updateScore(obj_uid string, obj_score string) []byte {
 		log.Fatal(err)
 		return []byte("300002")
 	}
+	defer stmtUpd1.Close()
 
 	_, err = stmtUpd1.Exec(new_score, obj_uid)
 	if err != nil {
@@ -282,6 +276,7 @@ func updateScore(obj_uid string, obj_score string) []byte {
 		log.Fatal(err)
 		return []byte("300002")
 	}
+	defer stmtUpd2.Close()
 
 	_, err = stmtUpd2.Exec(new_num, obj_uid)
 	if err != nil {
@@ -289,5 +284,5 @@ func updateScore(obj_uid string, obj_score string) []byte {
 		return []byte("300003")
 	} //评价人数+1
 
-	return []byte("评价成功")
+	return []byte("400000")
 }

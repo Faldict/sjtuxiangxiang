@@ -80,7 +80,7 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 		username := req.FormValue("username")
 		passwd := req.FormValue("password")
 		email := req.FormValue("email")
-		// need more userInfo
+		//need more userInfo
 		description := req.FormValue("description")
 		Age := req.FormValue("Age")
 		RelationStatus := req.FormValue("RelationStatus")
@@ -100,7 +100,8 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Fatal(err.Error())
 			rst = []byte("300001")
-			goto Here
+			w.Write(rst)
+			return
 		}
 		defer db.Close()
 
@@ -108,7 +109,8 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			log.Fatal(err.Error())
 			rst = []byte("300004") //300002SELECT错误
-			goto Here
+			w.Write(rst)
+			return
 		}
 
 		if passwd == PSD {
@@ -120,13 +122,13 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 			}
 			http.SetCookie(w, &cookie)
 			rst = []byte("200000") //200000登录成功
-			goto Here
+			w.Write(rst)
+			return
 		} else {
 			rst = []byte("200001") //300001密码错误
-			goto Here
+			w.Write(rst)
+			return
 		}
-	Here:
-		w.Write(rst)
 	}
 }
 
@@ -183,10 +185,9 @@ func addItemController(w http.ResponseWriter, req *http.Request) {
 		obj_name := req.FormValue("obj_name")
 		obj_price := req.FormValue("obj_price")
 		obj_info := req.FormValue("obj_info")
-		// use_time := req.FormValue("use_time")
-		start_time := req.FormValue("start_time")
-		end_time := req.FormValue("end_time")
-		rst := addItem(obj_name, uid, obj_price, obj_info, start_time, end_time)
+		use_time := req.FormValue("use_time")
+		typ := req.FormValue("type")
+		rst := addItem(obj_name, uid, obj_price, obj_info, use_time, typ)
 		w.Write(rst)
 	}
 }
@@ -196,7 +197,9 @@ func listItemController(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if req.Method == "GET" {
-		rst := listItem()
+		query := req.URL.Query()
+		typ := query["type"][0]
+		rst := listItem(typ)
 		commentData, err := json.MarshalIndent(rst, "", "    ")
 		if err != nil {
 			w.Write([]byte("600001"))
@@ -217,10 +220,7 @@ func shareRequestController(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		uid_response := req.FormValue("uid_response")
 		obj_name := req.FormValue("obj_name")
-		obj_price := req.FormValue("obj_price")
-		obj_info := req.FormValue("obj_info")
-		use_time := req.FormValue("use_time")
-		rst := shareRequest(uid_request, uid_response, obj_name, obj_price, obj_info, use_time)
+		rst := shareRequest(uid_request, uid_response, obj_name)
 		w.Write(rst)
 	}
 }
@@ -236,11 +236,8 @@ func shareResponseController(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		uid_request := req.FormValue("uid_request")
 		obj_name := req.FormValue("obj_name")
-		obj_price := req.FormValue("obj_price")
-		obj_info := req.FormValue("obj_info")
-		use_time := req.FormValue("use_time")
-		agree := req.FormValue("agree")
-		rst := shareResponse(uid_request, uid_response, obj_name, obj_price, obj_info, use_time, agree)
+		agree := req.FormValue("agree") //to be "1" or "0"
+		rst := shareResponse(uid_request, uid_response, obj_name, agree)
 		w.Write(rst)
 	}
 }

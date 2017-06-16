@@ -17,14 +17,16 @@ func sendMessage(content string, from string, to string) []byte {
 	db, err := sql.Open("mysql", "user:password@/database")
 	if err != nil {
 		log.Fatal(err)
-		return []byte("300001") //300001OPEN错误
+		return []byte("300001") //300001 OPEN错误
 	}
+	defer db.Close()
 
 	stmtIns, err := db.Prepare("INSERT INTO Message VALUES (?, ?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300002") //prepare错误
 	}
+	defer stmtIns.Close()
 
 	_, err = stmtIns.Exec(content, from, to, upload_time, read_state) // obj_state is string
 	if err != nil {
@@ -41,6 +43,7 @@ func receiveMessage(uid string) []byte {
 		log.Fatal(err)
 		return []byte("300001")
 	}
+	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Message WHERE to=?", uid)
 	if err != nil {
@@ -83,6 +86,7 @@ func listMessage(uid string) []byte {
 		log.Fatal(err)
 		return []byte("300001")
 	}
+	defer db.Close()
 
 	rows, err := db.Query("SELECT * FROM Message WHERE to=? OR from=?", uid, uid)
 	if err != nil {

@@ -50,7 +50,7 @@ func register(username string, passwd string, email string, description string, 
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	defer stmtIns.Close()
+	defer stmtIns2.Close()
 
 	var score, num string
 	score = "50"
