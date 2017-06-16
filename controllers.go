@@ -80,7 +80,7 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 		username := req.FormValue("username")
 		passwd := req.FormValue("password")
 		email := req.FormValue("email")
-		//need more userInfo
+		// need more userInfo
 		description := req.FormValue("description")
 		Age := req.FormValue("Age")
 		RelationStatus := req.FormValue("RelationStatus")
