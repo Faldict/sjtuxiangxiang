@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>个人空间 - 交大享享</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+
+
+  </head>
+<body>
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button> <a class="navbar-brand" href="#">交大享享</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="index.html">主页</a>
+						</li>
+						<li >
+							<a href="#">物品</a>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-default">
+							搜索
+						</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的信息<strong class="caret"></strong></a>
+							 <!--这里是否可以替换为用户名？-->
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">个人信息</a>
+								</li>
+								<li>
+									<a href="#">我的需求</a>
+								</li>
+								<li>
+									<a href="#">我的出租</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">消息</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#">注销</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			<img src="img/banner-slim.png" class="img-responsive" alt="Responsive image">
+			</br>
+		</div>
+	</div>
+</br>
+
+
+<!-- add contents here -->
+<div class = "row">
+	<div class="col-md-8">
+		<div class="col-md-2"></div>
+		<div class="col-md-10">
+			<h4>我的交易记录</h4>
+			<table class="table table-hover">
+			<thead>
+				<tr>
+	                <th>
+						状态
+					</th>
+					<th>
+					</th>
+					<th>
+						内容
+					</th>
+
+					<th>
+						联系人
+					</th>
+					<th>
+						有效日期
+					</th>
+				</tr>
+			</thead>
+			<tbody id="table-body">
+				<tr>
+					<td>
+						<span class="label label-warning">未完成</span>
+					</td>
+					<td>
+						 <span class="label label-success">租出</span>
+					</td>
+					<td>
+						<a href="#"> 求借单反相机进行社团活动拍摄</a>
+					</td>
+					<td>
+						admin
+					</td>
+					<td>
+						2017-05-21至2017-06-22
+					</td>
+				</tr>
+				<tr class="success">
+					<td>
+						<span class="label label-default">已完成</span>
+					</td>
+					<td>
+						 <span class="label label-primary">租入</span>
+					</td>
+					<td>
+						<a href="#">求借收音机</a>
+					</td>
+					<td>
+						admin
+					</td>
+					<td>
+						2017-05-01至2017-05-02
+					</td>
+				</tr>
+				</tbody>
+		</table>
+		<nav aria-label="Page navigation" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+		  <ul class="pagination">
+		    <li>
+		   </li><li class="disabled">
+		      <span>
+		        <span aria-hidden="true">«</span>
+		      </span>
+		    </li>
+		    <li class="active">
+		      <span>1 <span class="sr-only">(current)</span></span>
+		    </li>
+		    <li><a href="#">2</a></li>
+		    <li><a href="#">3</a></li>
+		    <li><a href="#">4</a></li>
+		    <li><a href="#">5</a></li>
+		    <li>
+		      <a href="#" aria-label="Next">
+		        <span aria-hidden="true">»</span>
+		      </a>
+		    </li>
+		  </ul>
+		</nav>
+	 	<div class="row" style="height: 100px;">
+	    <h4>我的共享物品(<span>12</span>)</h4>
+	      <div class="row" id="itemlist">
+		  <div class="col-md-4">
+		    <div class="thumbnail">
+		      <img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="..." >
+		      <div class="caption">
+		        <a href="object.html"><h4>瑜伽垫</h4></a>
+		        <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p>
+		        <p class="text-muted text-right"><span class="label label-success">可出租</span>admin	5元/天</p>
+		      </div>
+		    </div></div>
+
+		    	  <div class="col-md-4">
+		        <div class="thumbnail">
+		      <img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="...">
+		      <div class="caption">
+		        <a href="#"><h4>瑜伽垫</h4></a>
+		        <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p>
+		        <p class="text-muted text-right"><span class="label label-success">可出租</span>admin	5元/天</p>
+		      </div>
+		      </div>
+		      </div>
+
+		          	  <div class="col-md-4">
+		        <div class="thumbnail">
+		      <img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="..." >
+		      <div class="caption">
+		        <a href="#"><h4>瑜伽垫</h4></a>
+		        <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p>
+		        <p class="text-muted text-right"><span class="label label-default">已出租</span>admin	5元/天</p>
+		      </div>
+		      </div>
+		      </div>
+			  <nav aria-label="Page navigation" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+			  <ul class="pagination">
+			    <li>
+			   </li><li class="disabled">
+			      <span>
+			        <span aria-hidden="true">«</span>
+			      </span>
+			    </li>
+			    <li class="active">
+			      <span>1 <span class="sr-only">(current)</span></span>
+			    </li>
+			    <li><a href="#">2</a></li>
+			    <li><a href="#">3</a></li>
+			    <li><a href="#">4</a></li>
+			    <li><a href="#">5</a></li>
+			    <li>
+			      <a href="#" aria-label="Next">
+			        <span aria-hidden="true">»</span>
+			      </a>
+			    </li>
+			  </ul>
+			</nav>
+			</div>
+		</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="col-md-10">
+			<div class="thumbnail">
+		      <img src="img/idphoto.jpg" alt="..." class = "img-circle">
+		        <dt>用户名：</dt><span> Peter Chen<br></span>
+				  <dt>享享信用：</dt><span>43</span>  <span class="label label-warning">二级</span> <br>
+				  <dt>性别：</dt><span>男<br></span>
+				  <dt>年龄：</dt><span>21<br></span>
+				  <dt>手机号：</dt><span>150****6438<br></span>
+				  <dt>个人描述：</dt><span><p>用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，<br></p></span>
+		      <div class="caption">
+		     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploaditem" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+					  完善我的个人信息
+			</button>
+		      </div>
+		      </div>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+</div>
+
+
+<!-- footer -->
+<div class="container site-footer-container">
+<p class="text-right">© 2017 <a href="#">SJTU享享</a></p>
+</div>
+<!-- script -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+
+  </body>
+</html>
