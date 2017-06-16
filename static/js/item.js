@@ -45,12 +45,12 @@ function addItem() {
                 alert("Upload Failed! Try it later!");
             }
         }
-    );  
+    );
 }
 
 // Get Item List
-function getItem() {
-    var url = "items/listItem";
+function getWantItem() {
+    var url = "items/listItem?type=1";
     $.get(url, function(result) {
         var list = document.getElementById("itemlist");
         for (var i=0; i<result.length; i++) {
@@ -61,6 +61,22 @@ function getItem() {
                 '</p><p class="text-muted text-right"><span class="label label-success">' +
                 item.obj_state + '</span>' + item.obj_price + '元/天</p></div></div>';
             tpl.class = "col-md-4";
+            list.appendChild(tpl);
+        }
+    })
+}
+
+function getRentListItem() {
+    var url = "items/listItem?type=0";
+    $.get(url, function(result) {
+        var list = document.getElementById("table-body");
+        for (var i=0; i<result.length; i++) {
+            var item = result[i];
+            var tpl = document.createElement;
+                tpl.innerHTML = '<tr><td><span class="label label-default">' + 未完成 +
+                '</span></td><td class="number">' + String(i + 1) + '</td><td><a href="#">' + item.obj_info + 
+                '</a></td><td>' + item.uid + '</td><td>' + '</td><td>' + item.obj_price + '元/天 </td></tr>';
+            // tpl.class = "success";
             list.appendChild(tpl);
         }
     })
