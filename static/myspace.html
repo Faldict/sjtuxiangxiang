@@ -9,7 +9,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <script src="js/header.js"></script>
 
 
   </head>
@@ -59,7 +59,7 @@
 							</ul>
 						</li>
 						<li>
-							<a href="#">注销</a>
+							<a href="#" onclick="logout();return false;">注销</a>
 						</li>
 					</ul>
 				</div>
@@ -312,7 +312,7 @@
 								</label>
 							</div>
 
-							
+
 									<div class="radio">
 									<label>
 										<input type="radio" name="request-days" /> 男
@@ -321,7 +321,7 @@
 										<input type="radio" name="request-times" /> 女
 									</label>
 									</div>
-						
+
 							<div class="form-group">
 
 								<label for="phonenum">
@@ -334,8 +334,8 @@
 									个人描述
 								</label>
 							<textarea class="form-control" rows="5" name="request-content"></textarea></br>
-								
-		
+
+
 
 						</form>
 

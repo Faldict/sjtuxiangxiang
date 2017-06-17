@@ -9,7 +9,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <script src="js/header.js"></script>
 
 
   </head>
@@ -59,7 +59,7 @@
               </ul>
             </li>
             <li>
-              <a href="#">注销</a>
+              <a href="#" id="logstate">注销</a>
             </li>
           </ul>
         </div>
@@ -93,7 +93,7 @@
               <p id="price">5元/天</p></br>
             <dt>物品描述</dt>
               <p id="info">九成新，除礼拜五上午3、4节课外，其余时间可借。</p></br>
-              <button onclick="shareItem()" type="button" class="btn btn-lg btn-primary" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+              <button onclick="if(getCookie('uid')){shareItem();}else{window.location='login.html';}" type="button" class="btn btn-lg btn-primary" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
                我想租借
               </button>
           </div>
