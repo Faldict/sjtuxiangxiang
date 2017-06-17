@@ -1,4 +1,4 @@
-// Items.go
+﻿// Items.go
 // Author : Faldict/cmc_iris
 package main
 
@@ -314,4 +314,96 @@ func itemInfo(obj_id string) []byte {
 	result.obj_name = obj_id
 	j, err := json.Marshal(result)
 	return j
+}
+
+func tradeRecord(uid string) []byte {
+	db, err := sql.Open("mysql", "user:password@/database")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM ShareRequests WHERE uid_request = ? OR uid_responsse = ?", uid, uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		uid_other   string // 对方的uid
+		obj_name    string
+		cnt         string
+		upload_time string
+		typ         string // "0"/"1" 需求出租
+	}
+
+	var tmp data
+	var uid_1, uid_2 string
+	rst := []data{}
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&uid_1, &uid_2, &tmp.obj_name, &tmp.cnt, &tmp.upload_time)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if uid_1 == uid {
+			tmp.uid_other = uid_2
+			tmp.typ = "0"
+		}
+		if uid_2 == uid {
+			tmp.uid_other = uid_1
+			tmp.typ = "1"
+		}
+		rst = append(rst, tmp)
+	}
+	b, err := json.Marshal(rst)
+	if err != nil {
+		return []byte("600001")
+	}
+	return b
+}
+
+func listShare(uid string) []byte {
+	db, err := sql.Open("mysql", "user:password@/database")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Items WHERE Uploader = ?", uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		obj_name    string
+		uid         string
+		upload_time string
+		obj_state   string // sorry to change it to be string
+		obj_price   string // it need to be a string
+		obj_info    string
+		use_time    string
+		obj_type    string
+	}
+
+	var tmp data
+	rst := []data{}
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&tmp.obj_name, &tmp.uid, &tmp.upload_time, &tmp.obj_state, &tmp.obj_price, &tmp.obj_info, &tmp.use_time, &tmp.obj_type)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rst = append(rst, tmp)
+	}
+	b, err := json.Marshal(rst)
+	if err != nil {
+		return []byte("600001")
+	}
+	return b
 }

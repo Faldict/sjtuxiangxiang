@@ -1,4 +1,4 @@
-package main
+﻿package main
 
 import (
 	"bytes"
@@ -72,6 +72,10 @@ func itemController(w http.ResponseWriter, req *http.Request) {
 		updateScoreController(w, req)
 	case "info":
 		infoController(w, req)
+	case "tradeRecord":
+		tradeRecordController(w, req)
+	case "listShare":
+		listShareController(w, req)
 	default:
 		NotFound(w, req)
 	}
@@ -330,5 +334,49 @@ func updateScoreController(w http.ResponseWriter, req *http.Request) {
 		obj_score := req.FormValue("obj_score")
 		rst := updateScore(obj_uid, obj_score)
 		w.Write(rst)
+	}
+}
+
+func tradeRecordController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value
+	if req.Method == "GET" {
+		rst := tradeRecord(uid)
+		commentData, err := json.MarshalIndent(rst, "", "    ")
+		if err != nil {
+			w.Write([]byte("600001"))
+			return
+		}
+		io.Copy(w, bytes.NewReader(commentData))
+	}
+}
+
+func listShareController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	cookie_read, err := req.Cookie("uid")
+	if err != nil {
+		log.Fatal(err.Error())
+		w.Write([]byte("100000")) //100000未登录
+		return
+	}
+	uid := cookie_read.Value
+	if req.Method == "GET" {
+		rst := listShare(uid)
+		commentData, err := json.MarshalIndent(rst, "", "    ")
+		if err != nil {
+			w.Write([]byte("600001"))
+			return
+		}
+		io.Copy(w, bytes.NewReader(commentData))
 	}
 }
