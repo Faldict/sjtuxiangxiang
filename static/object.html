@@ -134,11 +134,11 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
     <script>
-      function getQueryString(name) { 
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-        var r = window.location.search.substr(1).match(reg); 
-        if (r != null) return unescape(r[2]); 
-        return null; 
+      function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
       }
       var obj_name = getQueryString("id");
       $.getJSON("items/info", {"id" : obj_name}, function (data) {
@@ -152,8 +152,8 @@
     </script>
     <script>
         function shareItem() {
-            var uploader = document.getElementById('uploader');
-            var obj = document.getElementById('title');
+            var uploader = document.getElementById('uploader').innerHTML;
+            var obj = document.getElementById('title').innerHTML;
             $.post("items/shareRequest", {
                 "uid_request" : uploader,
                 "obj_name" : obj
