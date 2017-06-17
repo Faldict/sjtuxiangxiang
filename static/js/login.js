@@ -6,6 +6,14 @@
 //
 // ---------------------------------------
 
+//设置cookie
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires +";path=/";
+}
+
 function login() {
     var username = document.getElementById('username').value;
     var passwd = document.getElementById('passwd').value;
@@ -15,13 +23,13 @@ function login() {
         "password" : passwd
     }, function (status) {
         if (status == "200000") {
-            alert("Login Success!");
+            setCookie('uid', username, 3);
+            console.log("Welcome!");
         } else {
             alert("Login Error!");
             console.log("Error Code: " + status + '\n');
         }
     });
-    window.location = "index.html";
 }
 
 function register() {
@@ -36,5 +44,5 @@ function register() {
     }, function (info) {
         alert(info);
     });
-    window.location = "login.html";    
+    window.location = "login.html";
 }

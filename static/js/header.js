@@ -3,7 +3,7 @@ function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    document.cookie = cname + "=" + cvalue + "; " + expires + ";path=/";
 }
 //获取cookie
 function getCookie(cname) {
@@ -26,11 +26,13 @@ function logout() {
     window.location.reload();
 }
 
-var logstate = document.getElementById('logstate');
+document.cookie = "uid=Faldict";
 if (getCookie('uid')) {
-    logstate.innerHTML = "Log Out";
-    logstate.onclick = logout();
+    console.log('Welcome!');
+    document.getElementById('logstate').innerHTML = "Log Out";
+    document.getElementById('logstate').onclick = logout;
 } else {
-    logstate.innerHTML = "Log In";
-    logstate.href = "login.html";
+    console.log("please log in first!");
+    document.getElementById('logstate').innerHTML = "Log In";
+    document.getElementById('logstate').href = "login.html";
 }

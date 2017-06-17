@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"bytes"
@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"os"
 	"log"
 	"net/http"
 	"strings"
@@ -72,10 +74,6 @@ func itemController(w http.ResponseWriter, req *http.Request) {
 		updateScoreController(w, req)
 	case "info":
 		infoController(w, req)
-	case "tradeRecord":
-		tradeRecordController(w, req)
-	case "listShare":
-		listShareController(w, req)
 	default:
 		NotFound(w, req)
 	}
@@ -99,10 +97,11 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 func loginUserController(w http.ResponseWriter, req *http.Request) {
 	var rst []byte
 	var PSD string
-	if req.Method == "POST" {
-		username := req.FormValue("username")
-		passwd := req.FormValue("password")
-		db, err := sql.Open("mysql", "user:password@/dbname")
+	if req.Method == "GET" {
+		query := req.URL.Query()
+		username := query["username"][0]
+		passwd := query["password"][0]
+		db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 		if err != nil {
 			log.Fatal(err.Error())
 			rst = []byte("300001")
@@ -127,8 +126,18 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 				MaxAge: 86400,
 			}
 			http.SetCookie(w, &cookie)
-			rst = []byte("200000") //200000登录成功
-			w.Write(rst)
+			w.Header().Set("Content-Type", "text/html")
+			w.Header().Set("Cache-Control", "no-cache")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			// rst = []byte("200000") //200000登录成功
+			// w.Write(rst)
+			fi, err := os.Open("static/index.html")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer fi.Close()
+			fd, err := ioutil.ReadAll(fi)
+			io.WriteString(w, string(fd))
 			return
 		} else {
 			rst = []byte("200001") //300001密码错误
@@ -206,12 +215,7 @@ func listItemController(w http.ResponseWriter, req *http.Request) {
 		query := req.URL.Query()
 		typ := query["type"][0]
 		rst := listItem(typ)
-		commentData, err := json.MarshalIndent(rst, "", "    ")
-		if err != nil {
-			w.Write([]byte("600001"))
-			return
-		}
-		io.Copy(w, bytes.NewReader(commentData))
+		w.Write(rst)
 	}
 }
 
@@ -249,14 +253,14 @@ func shareResponseController(w http.ResponseWriter, req *http.Request) {
 }
 
 func infoController(w http.ResponseWriter, req *http.Request) {
-	if req.Method == "GET" {
+	if req.Method == "POST" {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Cache-Control", "no-cache")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		query := req.URL.Query()
-		obj_name := query["id"][0]
+
+		obj_name := req.FormValue("id")
 		rst := itemInfo(obj_name)
-		io.Copy(w, bytes.NewReader(rst))
+		w.Write(rst)
 	}
 }
 
@@ -334,49 +338,5 @@ func updateScoreController(w http.ResponseWriter, req *http.Request) {
 		obj_score := req.FormValue("obj_score")
 		rst := updateScore(obj_uid, obj_score)
 		w.Write(rst)
-	}
-}
-
-func tradeRecordController(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	cookie_read, err := req.Cookie("uid")
-	if err != nil {
-		log.Fatal(err.Error())
-		w.Write([]byte("100000")) //100000未登录
-		return
-	}
-	uid := cookie_read.Value
-	if req.Method == "GET" {
-		rst := tradeRecord(uid)
-		commentData, err := json.MarshalIndent(rst, "", "    ")
-		if err != nil {
-			w.Write([]byte("600001"))
-			return
-		}
-		io.Copy(w, bytes.NewReader(commentData))
-	}
-}
-
-func listShareController(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	cookie_read, err := req.Cookie("uid")
-	if err != nil {
-		log.Fatal(err.Error())
-		w.Write([]byte("100000")) //100000未登录
-		return
-	}
-	uid := cookie_read.Value
-	if req.Method == "GET" {
-		rst := listShare(uid)
-		commentData, err := json.MarshalIndent(rst, "", "    ")
-		if err != nil {
-			w.Write([]byte("600001"))
-			return
-		}
-		io.Copy(w, bytes.NewReader(commentData))
 	}
 }

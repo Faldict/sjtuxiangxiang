@@ -1,4 +1,4 @@
-﻿// Items.go
+// Items.go
 // Author : Faldict/cmc_iris
 package main
 
@@ -8,6 +8,7 @@ import (
 	"log"
 	"strconv"
 	"time"
+	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -23,7 +24,7 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 	upload_time := time.Now()
 	obj_state := IN_TRADE
 
-	db, err := sql.Open("mysql", "user:password@/database")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001") //300001OPEN错误
@@ -47,7 +48,7 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 }
 
 func userinfo(uid string) []byte {
-	db, err := sql.Open("mysql", "user:password@/datebase")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")
@@ -91,7 +92,7 @@ func userinfo(uid string) []byte {
 }
 
 func listItem(typ string) []byte {
-	db, err := sql.Open("mysql", "user:password@/datebase")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")
@@ -105,27 +106,30 @@ func listItem(typ string) []byte {
 	}
 
 	type data struct {
-		obj_name    string
-		uid         string
-		upload_time string
-		obj_state   string // sorry to change it to be string
-		obj_price   string // it need to be a string
-		obj_info    string
-		use_time    string
+		Obj_name    string
+		Uid         string
+		Upload_time string
+		Obj_state   string // sorry to change it to be string
+		Obj_price   string // it need to be a string
+		Obj_info    string
+		Use_time    string
 	}
 
 	var tmp data
+	var tmp_type string
 	rst := []data{}
 
 	for rows.Next() {
 		rows.Columns()
-		err = rows.Scan(&tmp.obj_name, &tmp.uid, &tmp.upload_time, &tmp.obj_state, &tmp.obj_price, &tmp.obj_info, &tmp.use_time)
+		err = rows.Scan(&tmp.Obj_name, &tmp.Uid, &tmp.Upload_time, &tmp.Obj_state, &tmp.Obj_price, &tmp.Obj_info, &tmp.Use_time, &tmp_type)
 		if err != nil {
 			log.Fatal(err)
 		}
 		rst = append(rst, tmp)
+		fmt.Println(tmp.Obj_name)
 	}
 	b, err := json.Marshal(rst)
+
 	if err != nil {
 		return []byte("600001")
 	}
@@ -135,7 +139,7 @@ func listItem(typ string) []byte {
 func shareRequest(uid_request string, uid_response string, obj_name string) []byte {
 	upload_time := time.Now()
 
-	db, err := sql.Open("mysql", "user:password@/database")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001") //300001OPEN错误
@@ -149,7 +153,7 @@ func shareRequest(uid_request string, uid_response string, obj_name string) []by
 	}
 	defer stmtIns.Close()
 
-	_, err = stmtIns.Exec(uid_request, uid_response, obj_name, "0", upload_time) // obj_state is string
+	_, err = stmtIns.Exec(obj_name, uid_request, uid_response, "0", upload_time) // obj_state is string
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300003") //exec错误
@@ -163,7 +167,7 @@ func shareResponse(uid_request string, uid_response string, obj_name string, agr
 	var count string
 	var cnt int
 
-	db, err := sql.Open("mysql", "user:password@/database")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")
@@ -219,7 +223,7 @@ func shareResponse(uid_request string, uid_response string, obj_name string, agr
 func updateScore(obj_uid string, obj_score string) []byte {
 	var cur_score, cur_num, new_score, new_num string
 	var cscore, cnum, oscore, nscore, nnum int
-	db, err := sql.Open("mysql", "user:password@/dbname")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err.Error())
 		return []byte("300001")
@@ -288,7 +292,7 @@ func updateScore(obj_uid string, obj_score string) []byte {
 }
 
 func itemInfo(obj_id string) []byte {
-	db, err := sql.Open("mysql", "user:password@/dbname")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err.Error())
 		return []byte("300001")
@@ -296,114 +300,25 @@ func itemInfo(obj_id string) []byte {
 	defer db.Close()
 
 	type data struct {
-		obj_name    string
-		uploader    string
-		upload_time string
-		obj_price   string // it need to be a string
-		obj_info    string
-		use_time    string
-		score       string
+		Obj_name    string
+		Uploader    string
+		Upload_time string
+		Obj_price   string // it need to be a string
+		Obj_info    string
+		Use_time    string
+		Score       int
 	}
 	var result data
-	err = db.QueryRow("SELECT Uploader, UploadTime, OBJ_price, OBJ_INFO, OBJ_usetime FROM Items WHERE OBJ_name = ？", obj_id).Scan(&result.uploader, &result.upload_time, &result.obj_price, &result.obj_info, &result.use_time)
-	err = db.QueryRow("SELECT score FROM INFO WHERE user_ID = ?", result.uploader).Scan(&result.score)
+	fmt.Println(obj_id)
+	err = db.QueryRow("SELECT Uploader, UploadTime, OBJ_price, OBJ_INFO, OBJ_usetime FROM Items WHERE OBJ_name = '" + obj_id + "'").Scan(&result.Uploader, &result.Upload_time, &result.Obj_price, &result.Obj_info, &result.Use_time)
+	result.Score = 80
+	// err = db.QueryRow("SELECT score FROM info WHERE user_ID = ?", result.uploader).Scan(&result.score)
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300002")
 	}
-	result.obj_name = obj_id
+	fmt.Println(result.Uploader)
+	result.Obj_name = obj_id
 	j, err := json.Marshal(result)
 	return j
-}
-
-func tradeRecord(uid string) []byte {
-	db, err := sql.Open("mysql", "user:password@/database")
-	if err != nil {
-		log.Fatal(err)
-		return []byte("300001")
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM ShareRequests WHERE uid_request = ? OR uid_responsse = ?", uid, uid)
-	if err != nil {
-		log.Fatal(err)
-		return []byte("300004")
-	}
-
-	type data struct {
-		uid_other   string // 对方的uid
-		obj_name    string
-		cnt         string
-		upload_time string
-		typ         string // "0"/"1" 需求出租
-	}
-
-	var tmp data
-	var uid_1, uid_2 string
-	rst := []data{}
-
-	for rows.Next() {
-		rows.Columns()
-		err = rows.Scan(&uid_1, &uid_2, &tmp.obj_name, &tmp.cnt, &tmp.upload_time)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if uid_1 == uid {
-			tmp.uid_other = uid_2
-			tmp.typ = "0"
-		}
-		if uid_2 == uid {
-			tmp.uid_other = uid_1
-			tmp.typ = "1"
-		}
-		rst = append(rst, tmp)
-	}
-	b, err := json.Marshal(rst)
-	if err != nil {
-		return []byte("600001")
-	}
-	return b
-}
-
-func listShare(uid string) []byte {
-	db, err := sql.Open("mysql", "user:password@/database")
-	if err != nil {
-		log.Fatal(err)
-		return []byte("300001")
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM Items WHERE Uploader = ?", uid)
-	if err != nil {
-		log.Fatal(err)
-		return []byte("300004")
-	}
-
-	type data struct {
-		obj_name    string
-		uid         string
-		upload_time string
-		obj_state   string // sorry to change it to be string
-		obj_price   string // it need to be a string
-		obj_info    string
-		use_time    string
-		obj_type    string
-	}
-
-	var tmp data
-	rst := []data{}
-
-	for rows.Next() {
-		rows.Columns()
-		err = rows.Scan(&tmp.obj_name, &tmp.uid, &tmp.upload_time, &tmp.obj_state, &tmp.obj_price, &tmp.obj_info, &tmp.use_time, &tmp.obj_type)
-		if err != nil {
-			log.Fatal(err)
-		}
-		rst = append(rst, tmp)
-	}
-	b, err := json.Marshal(rst)
-	if err != nil {
-		return []byte("600001")
-	}
-	return b
 }

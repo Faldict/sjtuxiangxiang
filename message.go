@@ -14,7 +14,7 @@ func sendMessage(content string, from string, to string) []byte {
 	upload_time := time.Now()
 	read_state := "0"
 
-	db, err := sql.Open("mysql", "user:password@/database")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001") //300001 OPEN错误
@@ -38,7 +38,7 @@ func sendMessage(content string, from string, to string) []byte {
 }
 
 func receiveMessage(uid string) []byte {
-	db, err := sql.Open("mysql", "user:password@/datebase")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")
@@ -81,7 +81,7 @@ func receiveMessage(uid string) []byte {
 }
 
 func listMessage(uid string) []byte {
-	db, err := sql.Open("mysql", "user:password@/datebase")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
 		return []byte("300001")

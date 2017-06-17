@@ -26,7 +26,7 @@ import (
 
 func register(username string, passwd string, email string, description string, Age string, RelationStatus string, Jaccount string) []byte {
 	// TODO
-	db, err := sql.Open("mysql", "user:password@/dbname")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -66,7 +66,7 @@ func register(username string, passwd string, email string, description string, 
 
 //func login(w http.ResponseWriter, uid string, passwd string) []byte {
 /*
-	db, err := sql.Open("mysql", "user:password@/dbname")
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

@@ -39,7 +39,7 @@ function addItem() {
             "start_time" : date1,
             "end_time" : date2
         }, function (status) {
-            if (status == "100000") {
+            if (status == "400000") {
                 alert("Upload Success!");
             } else {
                 alert("Upload Failed! Try it later!");
@@ -49,14 +49,14 @@ function addItem() {
 }
 
 // Get Item List
-function getWantItem() {
+function getRentItem() {
     var url = "items/listItem?type=1";
-    $.get(url, function(result) {
-        var list = document.getElementById("itemlist");
+    $.getJSON(url, function(result) {
+        var list = document.getElementById("table-body");
         for (var i=0; i<result.length; i++) {
             var item = result[i];
-            var tpl = document.createElement;
-            tpl.innerHTML = '<div class="thumbnail"><img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="..."><div class="caption"><a href="object.html?id=' 
+            var tpl = document.createElement('div');
+            tpl.innerHTML = '<div class="thumbnail"><img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="..."><div class="caption"><a href="object.html?id='
                 + item.obj_name + '"><h4>' + item.obj_name +
                 '</h4></a><p>' + item.obj_info +
                 '</p><p class="text-muted text-right"><span class="label label-success">' +
@@ -67,17 +67,19 @@ function getWantItem() {
     })
 }
 
-function getRentItem() {
+function getWantItem() {
     var url = "items/listItem?type=0";
     $.get(url, function(result) {
         var list = document.getElementById("table-body");
         for (var i=0; i<result.length; i++) {
             var item = result[i];
-            var tpl = document.createElement;
-                tpl.innerHTML = '<tr><td><span class="label label-default">' + 未完成 +
-                '</span></td><td class="number">' + String(i + 1) + '</td><td><a href="object.html?id=' +
-                item.obj_name + '">' + item.obj_info + 
-                '</a></td><td>' + item.uid + '</td><td>' + '</td><td>' + item.obj_price + '元/天 </td></tr>';
+            console.log(item);
+            var status = item.Obj_state == "0" ? '<td><span class="label label-default">未完成' : '<td><span class="label label-success">已完成';
+            var tpl = document.createElement('tr');
+                tpl.innerHTML = '<td><span class="label label-default">未完成' +
+                '</span></td><td><a href="object.html?id=' +
+                item.Obj_name + '">' + item.Obj_name +
+                '</a></td><td>' + item.Upload_time + '至' + item.Use_time + '</td><td>' + item.Uid + '</td><td>' + item.Obj_price + '元/天 </td>';
             // tpl.class = "success";
             list.appendChild(tpl);
         }

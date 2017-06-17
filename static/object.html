@@ -9,9 +9,6 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <script src="js/header.js"></script>
-
-
   </head>
 <body>
 
@@ -126,6 +123,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
+    <script src="js/header.js"></script>
     <script>
       function getQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -134,13 +132,15 @@
         return null;
       }
       var obj_name = getQueryString("id");
-      $.getJSON("items/info", {"id" : obj_name}, function (data) {
-        document.getElementById('title').innerHTML = data.obj_name;
-        document.getElementById('uploader').innerHTML = data.uploader;
-        document.getElementById('price').innerHTML = data.obj_price;
-        document.getElementById('info').innerHTML = data.obj_info;
-        document.getElementById('score').innerHTML = data.score;
-        document.getElementById('time').innerHTML = data.upload_time + '~' + data.use_time;
+      console.log("Is query" + obj_name);
+      $.post("items/info", {"id" : obj_name}, function (data) {
+        console.log(data);
+        document.getElementById('title').innerHTML = data.Obj_name;
+        document.getElementById('uploader').innerHTML = data.Uploader;
+        document.getElementById('price').innerHTML = data.Obj_price;
+        document.getElementById('info').innerHTML = data.Obj_info;
+        document.getElementById('score').innerHTML = data.Score;
+        document.getElementById('time').innerHTML = data.Upload_time + '~' + data.Use_time;
       })
     </script>
     <script>
@@ -148,7 +148,7 @@
             var uploader = document.getElementById('uploader').innerHTML;
             var obj = document.getElementById('title').innerHTML;
             $.post("items/shareRequest", {
-                "uid_request" : uploader,
+                "uid_response" : uploader,
                 "obj_name" : obj
             }, function (data) {
                 if (data == "400000") {
