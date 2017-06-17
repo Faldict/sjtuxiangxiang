@@ -70,6 +70,8 @@ func itemController(w http.ResponseWriter, req *http.Request) {
 		shareResponseController(w, req)
 	case "updateScore":
 		updateScoreController(w, req)
+	case "info":
+		infoController(w, req)
 	default:
 		NotFound(w, req)
 	}
@@ -239,6 +241,18 @@ func shareResponseController(w http.ResponseWriter, req *http.Request) {
 		agree := req.FormValue("agree") //to be "1" or "0"
 		rst := shareResponse(uid_request, uid_response, obj_name, agree)
 		w.Write(rst)
+	}
+}
+
+func infoController(w http.ResponseWriter, req *http.Request) {
+	if req.Method == "GET" {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Cache-Control", "no-cache")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		query := req.URL.Query()
+		obj_name := query["id"][0]
+		rst := itemInfo(obj_name)
+		io.Copy(w, bytes.NewReader(rst))
 	}
 }
 

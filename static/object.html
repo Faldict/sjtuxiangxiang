@@ -89,18 +89,18 @@
           <div class = "col-md-8">
             <div class="panel panel-default">
             <div class="panel-body">
-            <h3>瑜伽垫</h3></br>
+            <h3 id="title">瑜伽垫</h3></br>
             <dt>所有者</dt>
-              <p>admin</p></br>
+              <p id="uploader">admin</p></br>
             <dt>有效时间</dt>
-              <p>2017-05-21至2017-06-22</p></br>
+              <p id="time">2017-05-21至2017-06-22</p></br>
             <dt>享享信用</dt>
-              <p>43<span class="label label-warning">二级</span></p></br>
+              <p id="score">43<span class="label label-warning">二级</span></p></br>
             <dt>租借价格</dt>
-              <p>5元/天</p></br>
+              <p id="price">5元/天</p></br>
             <dt>物品描述</dt>
-              <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p></br>
-              <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#uploaditem" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+              <p id="info">九成新，除礼拜五上午3、4节课外，其余时间可借。</p></br>
+              <button onclick="shareItem()" type="button" class="btn btn-lg btn-primary" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
                我想租借
               </button>
           </div>
@@ -133,6 +133,39 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
-
+    <script>
+      function getQueryString(name) { 
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+        var r = window.location.search.substr(1).match(reg); 
+        if (r != null) return unescape(r[2]); 
+        return null; 
+      }
+      var obj_name = getQueryString("id");
+      $.getJSON("items/info", {"id" : obj_name}, function (data) {
+        document.getElementById('title').innerHTML = data.obj_name;
+        document.getElementById('uploader').innerHTML = data.uploader;
+        document.getElementById('price').innerHTML = data.obj_price;
+        document.getElementById('info').innerHTML = data.obj_info;
+        document.getElementById('score').innerHTML = data.score;
+        document.getElementById('time').innerHTML = data.upload_time + '~' + data.use_time;
+      })
+    </script>
+    <script>
+        function shareItem() {
+            var uploader = document.getElementById('uploader');
+            var obj = document.getElementById('title');
+            $.post("items/shareRequest", {
+                "uid_request" : uploader,
+                "obj_name" : obj
+            }, function (data) {
+                if (data == "400000") {
+                    alert("请等待物主确认！");
+                } else {
+                    alert("error!");
+                    console.log(data);
+                }
+            })
+        }
+    </script>
   </body>
 </html>
