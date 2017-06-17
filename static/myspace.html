@@ -303,17 +303,49 @@
         <h4 class="modal-title" id="myModalLabel">联系人详情</h4>
       </div>
       <div class="modal-body">
-      <div class="row">
-      	<div class="col-md-3"></div>
-		<div class="col-md-6">
-		      <img src="img/idphoto.jpg" alt="..." class = "img-circle" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
-		        <dt>用户名：</dt><span> Peter Chen<br></span>
-				  <dt>享享信用：</dt><span>43</span>  <span class="label label-warning">二级</span> <br>
-				  <dt>性别：</dt><span>男<br></span>
-				  <dt>年龄：</dt><span>21<br></span>
-				  <dt>手机号：</dt><span>15008926438<br></span>
-				  <dt>个人描述：</dt><span><p>用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，<br></p></span>
-		</div>
+       <div class="modal-body">
+						<form role="form" name="request">
+							<div class="form-group">
+
+								<label for="username">
+									用户名
+								</label>
+								<input type="text" class="form-control" id="requesttitle" name="request-title" />
+							</div>
+							<div class="form-group">
+
+								<label for="gender">
+									性别
+								</label>
+							</div>
+
+							
+									<div class="radio">
+									<label>
+										<input type="radio" name="request-days" /> 男
+									</label>
+									<label>
+										<input type="radio" name="request-times" /> 女
+									</label>
+									</div>
+						
+							<div class="form-group">
+
+								<label for="phonenum">
+									手机号
+								</label>
+								<input type="text" class="form-control" id="requesttitle" name="request-title" />
+							</div>
+							<div class="form-group">
+												<label>
+									个人描述
+								</label>
+							<textarea class="form-control" rows="5" name="request-content"></textarea></br>
+								
+		
+
+						</form>
+
       </div></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
