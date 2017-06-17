@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>登录</title>
+        <title>登录 - 交大享享</title>
         <style class="anchorjs"></style>
         <!-- ???���?? Bootstrap ???? CSS ??? -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -14,33 +14,17 @@
     <nav class="navbar navbar-default">
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#">交大享享</a>
-            </div>
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">
+            <img alt="Brand" src="img/logo.png">
+          </a>
+        </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="#">主页 <span class="sr-only">(current)</span></a></li>
+                <li class="active"><a href="index.html">主页 <span class="sr-only">(current)</span></a></li>
                 <li><a href="itemlist_wanted.html">物品</a></li>
-                <!-- <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li> -->
               </ul>
               <form class="navbar-form navbar-left">
                 <div class="form-group">
@@ -54,18 +38,12 @@
                              <!--这里是否可以替换为用户名？-->
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#">个人信息</a>
-                                </li>
-                                <li>
-                                    <a href="#">我的需求</a>
-                                </li>
-                                <li>
-                                    <a href="#">我的出租</a>
+                                    <a href="myspace.html">个人空间</a>
                                 </li>
                                 <li class="divider">
                                 </li>
                                 <li>
-                                    <a href="#">消息</a>
+                                    <a href="notifications-unread.html">消息</a>
                                 </li>
                             </ul>
                         </li>
@@ -105,6 +83,13 @@
             <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="login()">登录</button>
         </div>
     </div>
+
+<!-- footer -->
+<div class="container site-footer-container">
+<p class="text-right">© 2017 <a href="#">SJTU享享</a></p>
+</div>
+
+</div>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/login.js"></script>
