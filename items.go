@@ -62,14 +62,14 @@ func userinfo(uid string) []byte {
 	}
 
 	type data struct {
-		uid string
+		Uid string
 		// photo
-		description        string
+		Description        string
 		Age                string
 		RelationshipStatus string // {single, inlove}
 		Jaccount           string
-		score              string
-		num                string
+		Score              string
+		Num                string
 	}
 
 	var tmp data
@@ -77,7 +77,7 @@ func userinfo(uid string) []byte {
 
 	for rows.Next() {
 		rows.Columns()
-		err = rows.Scan(&tmp.uid, &tmp.description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.score, &tmp.num)
+		err = rows.Scan(&tmp.Uid, &tmp.Description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.Score, &tmp.Num)
 		if err != nil {
 			log.Fatal(err)
 			return []byte("300005") //读取错误
@@ -321,4 +321,96 @@ func itemInfo(obj_id string) []byte {
 	result.Obj_name = obj_id
 	j, err := json.Marshal(result)
 	return j
+}
+
+func tradeRecord(uid string) []byte {
+	db, err := sql.Open("mysql", "user:password@/database")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM ShareRequests WHERE uid_request = ? OR uid_responsse = ?", uid, uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		Uid_other   string // 对方的uid
+		Obj_name    string
+		Cnt         string
+		Upload_time string
+		Typ         string // "0"/"1" 需求出租
+	}
+
+	var tmp data
+	var uid_1, uid_2 string
+	rst := []data{}
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&uid_1, &uid_2, &tmp.Obj_name, &tmp.Cnt, &tmp.Upload_time)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if uid_1 == uid {
+			tmp.Uid_other = uid_2
+			tmp.Typ = "0"
+		}
+		if uid_2 == uid {
+			tmp.Uid_other = uid_1
+			tmp.Typ = "1"
+		}
+		rst = append(rst, tmp)
+	}
+	b, err := json.Marshal(rst)
+	if err != nil {
+		return []byte("600001")
+	}
+	return b
+}
+
+func listShare(uid string) []byte {
+	db, err := sql.Open("mysql", "user:password@/database")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Items WHERE Uploader = ?", uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		Obj_name    string
+		Uid         string
+		Upload_time string
+		Obj_state   string // sorry to change it to be string
+		Obj_price   string // it need to be a string
+		Obj_info    string
+		Use_time    string
+		Obj_type    string
+	}
+
+	var tmp data
+	rst := []data{}
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&tmp.Obj_name, &tmp.Uid, &tmp.Upload_time, &tmp.Obj_state, &tmp.Obj_price, &tmp.Obj_info, &tmp.Use_time, &tmp.Obj_type)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rst = append(rst, tmp)
+	}
+	b, err := json.Marshal(rst)
+	if err != nil {
+		return []byte("600001")
+	}
+	return b
 }
