@@ -98,58 +98,10 @@
 					</th>
 				</tr>
 			</thead>
-			<tbody id="table-body">
-				<tr>
-					<td>
-						<span class="label label-warning">未完成</span>
-					</td>
-					<td>
-						 <span class="label label-success">租出</span>
-					</td>
-					<td>
-						<a href="requirement.html"> 求借单反相机进行社团活动拍摄</a>
-					</td>
-					<td>
-						<button type="button" class="btn btn-link " data-toggle="modal" data-target="#target">
-							admin
-						</button>
-					</td>
-					<td>
-						2017-05-21
-					</td>
-					<td>
-						<button type="button" class="btn btn-primary btn-sm">
-							完成交易
-						</button>
-					</td>
-				</tr>
-				<tr class="success">
-					<td>
-						<span class="label label-default">已完成</span>
-					</td>
-					<td>
-						 <span class="label label-primary">租入</span>
-					</td>
-					<td>
-						<a href="#">求借收音机</a>
-					</td>
-					<td>
-						<button type="button" class="btn btn-link " data-toggle="modal" data-target="#target">
-							admin
-						</button>
-					</td>
-					<td>
-						2017-05-01
-					</td>
-					<td>
-						<button type="button" class="btn btn-sm" disabled="disabled">
-							已经完成
-						</button>
-					</td>
-				</tr>
-				</tbody>
+			<tbody id="table-body"></tbody>
 		</table>
-		<nav aria-label="Page navigation" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
+
+		<!-- <nav aria-label="Page navigation" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
 		  <ul class="pagination">
 		    <li>
 		   </li><li class="disabled">
@@ -170,77 +122,49 @@
 		      </a>
 		    </li>
 		  </ul>
-		</nav>
-	 	<!-- <div class="row" style="height: 100px;">
-	    <h4>我的共享物品(<span>12</span>)</h4>
-	      <div class="row" id="itemlist">
-		  <div class="col-md-4">
-		    <div class="thumbnail">
-		      <img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="..." >
-		      <div class="caption">
-		        <a href="object.html"><h4>瑜伽垫</h4></a>
-		        <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p>
-		        <p class="text-muted text-right"><span class="label label-success">可出租</span>admin	5元/天</p>
-		      </div>
-		    </div></div>
+		</nav> -->
 
-		    	  <div class="col-md-4">
-		        <div class="thumbnail">
-		      <img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="...">
-		      <div class="caption">
-		        <a href="#"><h4>瑜伽垫</h4></a>
-		        <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p>
-		        <p class="text-muted text-right"><span class="label label-success">可出租</span>admin	5元/天</p>
-		      </div>
-		      </div>
-		      </div>
-
-		          	  <div class="col-md-4">
-		        <div class="thumbnail">
-		      <img src="http://www1.pcbaby.com.cn/yongping624.jpg" alt="..." >
-		      <div class="caption">
-		        <a href="#"><h4>瑜伽垫</h4></a>
-		        <p>九成新，除礼拜五上午3、4节课外，其余时间可借。</p>
-		        <p class="text-muted text-right"><span class="label label-default">已出租</span>admin	5元/天</p>
-		      </div>
-		      </div>
-		      </div>
-			  <nav aria-label="Page navigation" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
-			  <ul class="pagination">
-			    <li>
-			   </li><li class="disabled">
-			      <span>
-			        <span aria-hidden="true">«</span>
-			      </span>
-			    </li>
-			    <li class="active">
-			      <span>1 <span class="sr-only">(current)</span></span>
-			    </li>
-			    <li><a href="#">2</a></li>
-			    <li><a href="#">3</a></li>
-			    <li><a href="#">4</a></li>
-			    <li><a href="#">5</a></li>
-			    <li>
-			      <a href="#" aria-label="Next">
-			        <span aria-hidden="true">»</span>
-			      </a>
-			    </li>
-			  </ul>
-			</nav>
-			</div>
-		</div> -->
+	 	<div class="row" style="height: 100px;">
+	    <h4>我的共享物品</h4>
+	      <div class="row" id="itemlist-table">
+	      	<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							状态
+						</th>
+						<th>
+							需求标题
+						</th>
+						<th>
+							有效日期
+						</th>
+						<th>
+							发布人
+						</th>
+						<th>
+							物品价格
+						</th>
+					</tr>
+				</thead>
+				<tbody id="itemlist">
+				</tbody>
+			</table>
+	      </div>
 		</div>
+		</div>
+
 	</div>
 	<div class="col-md-4">
 		<div class="col-md-10">
 			<div class="thumbnail">
 		      <img src="img/idphoto.jpg" alt="..." class = "img-circle">
-		        <dt>用户名：</dt><span id="user_name"> Peter Chen</span><br>
-				  <dt>享享信用：</dt><span id="user_score">43</span>  <span class="label label-warning">二级</span> <br>
-				  <dt>情感状态：</dt><span id="user_sex">男</span><br>
-				  <dt>年龄：</dt><span id="user_age">21</span><br>
-				  <dt>手机号：</dt><span id="user_email">15008926438</span><br>
-				  <dt>个人描述：</dt><span><p id="user_info">用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介</p></span><br>
+		        <dt>用户名：</dt><span id="user_name"> Peter Chen</span>
+				  <dt>享享信用：</dt><span id="user_score">43</span>  <span class="label label-warning">二级</span>
+				  <dt>情感状态：</dt><span id="user_sex">男</span>
+				  <dt>年龄：</dt><span id="user_age">21</span>
+				  <dt>手机号：</dt><span id="user_email">15008926438</span>
+				  <dt>个人描述：</dt><span><p id="user_info">用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介</p></span>
 		      <div class="caption">
 		     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editprofile" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
 					  完善我的个人信息
@@ -264,54 +188,43 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">联系人详情</h4>
+        <h4 class="modal-title" id="myModalLabel">用户信息详情</h4>
       </div>
       <div class="modal-body">
        <div class="modal-body">
-						<form role="form" name="request">
+						<form role="form" name="request" action="/user/updateinfo" method="post">
 							<div class="form-group">
 
 								<label for="username">
-									用户名
+									年龄
 								</label>
-								<input type="text" class="form-control" id="requesttitle" name="request-title" />
+								<input type="text" class="form-control" id="requesttitle" name="Age" />
 							</div>
 							<div class="form-group">
 
-								<label for="gender">
-									性别
+								<label for="username">
+									情感状态
 								</label>
+								<input type="text" class="form-control" id="requesttitle" name="RelationStatus" />
 							</div>
-
-
-									<div class="radio">
-									<label>
-										<input type="radio" name="request-days" /> 男
-									</label>
-									<label>
-										<input type="radio" name="request-times" /> 女
-									</label>
-									</div>
 
 							<div class="form-group">
 
 								<label for="phonenum">
-									手机号
+									Jaccount
 								</label>
-								<input type="text" class="form-control" id="requesttitle" name="request-title" />
+								<input type="text" class="form-control" id="requesttitle" name="jaccount" />
 							</div>
 							<div class="form-group">
 												<label>
 									个人描述
 								</label>
-							<textarea class="form-control" rows="5" name="request-content"></textarea></br>
+							<textarea class="form-control" rows="5" name="description"></textarea></br>
+        					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        					<button type="submit" value="submit" class="btn btn-primary">发布</button>
 							</div>
 						</form>
 					</div></div>
-      	<div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" onclick="addItem()">发布</button>
-      </div>
     </div>
   </div>
 </div>
@@ -335,6 +248,23 @@
         	document.getElementById('user_score').innerHTML = data.Score;
         	document.getElementById('user_info').innerHTML = data.Description;
         	document.getElementById('user_email').innerHTML = data.Phone;
+        });
+
+        url = "/user/listShare";
+        $.getJSON(url, function (data) {
+        	var list = document.getElementById('itemlist');
+        	for (var i=0; i<data.length; i++) {
+        		var item = data[i];
+            	console.log(item);
+            	var status = item.Obj_state == "0" ? '<td><span class="label label-default">未完成' : '<td><span class="label label-success">已完成';
+            	var tpl = document.createElement('tr');
+                tpl.innerHTML = status +
+                	'</span></td><td><a href="object.html?id=' +
+                	item.Obj_name + '">' + item.Obj_name +
+                	'</a></td><td>' + item.Upload_time + '至' + item.Use_time + '</td><td>' + item.Uid + '</td><td>' + item.Obj_price + '元/天 </td>';
+            // tpl.class = "success";
+            	list.appendChild(tpl);
+        	}
         });
     </script>
     <script src="js/TradeRecord.js"></script>

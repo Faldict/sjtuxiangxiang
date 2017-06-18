@@ -27,14 +27,12 @@ import (
 // )
 
 func register(username string, passwd string, email string, description string, Age string, RelationStatus string, Jaccount string) []byte {
-	// TODO
 	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	defer db.Close()
 
-	// TODO
 	// Prepare statement for inserting data
 	stmtIns, err := db.Prepare("INSERT INTO users VALUES( ?, ?, ? )") // ? = placeholder
 	if err != nil {
@@ -64,6 +62,27 @@ func register(username string, passwd string, email string, description string, 
 	}
 
 	return []byte("Register successfully")
+}
+
+func updateInfo(username string, description string, age string, RelationStatus string, Jaccount string) string {
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	defer db.Close()
+
+	stmtIns, err := db.Prepare("UPDATE INFO_table SET description = ?, age = ?, RelationshipStatus = ?, Jaccount = ? WHERE user_ID = ?")
+	if err != nil {
+		log.Fatal(err.Error()) // proper error handling instead of panic in your app
+	}
+	defer stmtIns.Close()
+
+	_, err = stmtIns.Exec(description, age, RelationStatus, Jaccount, username) // Insert tuples (i, i^2)
+	if err != nil {
+		log.Fatal(err.Error()) // proper error handling instead of panic in your app
+		return "Update Error"
+	}
+	return "Update successfully!"
 }
 
 //func login(w http.ResponseWriter, uid string, passwd string) []byte {
@@ -211,6 +230,52 @@ func listShare(uid string) []byte {
 	b, err := json.Marshal(rst)
 	if err != nil {
 		return []byte("600001")
+	}
+	return b
+}
+
+func userInfo(uid string) []byte {
+	fmt.Println(uid)
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM INFO_table WHERE user_ID=?", uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		Uid string
+		// photo
+		Description        string
+		Age                string
+		RelationshipStatus string // {single, inlove}
+		Jaccount           string
+		Score              string
+		Num                string
+		Phone              string
+	}
+
+	var tmp data
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&tmp.Uid, &tmp.Description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.Score, &tmp.Num)
+		if err != nil {
+			log.Fatal(err)
+			return []byte("300005") //读取错误
+		}
+	}
+
+	db.QueryRow("SELECT EMAIL FROM users WHERE user_ID = ?", uid).Scan(&tmp.Phone)
+	b, err := json.Marshal(tmp)
+	if err != nil {
+		return []byte("600001") // json错误
 	}
 	return b
 }

@@ -8,7 +8,6 @@ import (
 	"log"
 	"strconv"
 	"time"
-	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -45,52 +44,6 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 	}
 
 	return []byte("400000") //400000添加成功
-}
-
-func userInfo(uid string) []byte {
-	fmt.Println(uid)
-	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
-	if err != nil {
-		log.Fatal(err)
-		return []byte("300001")
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM INFO_table WHERE user_ID=?", uid)
-	if err != nil {
-		log.Fatal(err)
-		return []byte("300004")
-	}
-
-	type data struct {
-		Uid string
-		// photo
-		Description        string
-		Age                string
-		RelationshipStatus string // {single, inlove}
-		Jaccount           string
-		Score              string
-		Num                string
-		Phone              string
-	}
-
-	var tmp data
-
-	for rows.Next() {
-		rows.Columns()
-		err = rows.Scan(&tmp.Uid, &tmp.Description, &tmp.Age, &tmp.RelationshipStatus, &tmp.Jaccount, &tmp.Score, &tmp.Num)
-		if err != nil {
-			log.Fatal(err)
-			return []byte("300005") //读取错误
-		}
-	}
-
-	db.QueryRow("SELECT EMAIL FROM users WHERE user_ID = ?", uid).Scan(&tmp.Phone)
-	b, err := json.Marshal(tmp)
-	if err != nil {
-		return []byte("600001") // json错误
-	}
-	return b
 }
 
 func listItem(typ string) []byte {

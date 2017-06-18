@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>个人空间 - 交大享享</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+  	<div class="container-fluid">
+	  <div class="row">
+		<div class="col-md-12">
+			<nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">
+            <img alt="Brand" src="img/logo.png">
+          </a>
+        </div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="index.html">主页</a>
+						</li>
+						<li >
+							<a href="itemlist_wanted.html">物品</a>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-default">
+							搜索
+						</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">我的信息<strong class="caret"></strong></a>
+							 <!--这里是否可以替换为用户名？-->
+							<ul class="dropdown-menu">
+								<li>
+									<a href="myspace.html">个人空间</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									<a href="notifications-unread.html">消息</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" id='logstate'>注销</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<img src="img/banner-slim.png" class="img-responsive" alt="Responsive image">
+			</br>
+	  		<div class="col-md-10">
+			  <div class="thumbnail">
+		      	<img src="img/idphoto.jpg" alt="..." class = "img-circle">
+		        <dt>用户名：</dt><span id="user_name"> Peter Chen</span>
+				  <dt>享享信用：</dt><span id="user_score">43</span>  <span class="label label-warning">二级</span>
+				  <dt>情感状态：</dt><span id="user_sex">男</span>
+				  <dt>年龄：</dt><span id="user_age">21</span>
+				  <dt>手机号：</dt><span id="user_email">15008926438</span>
+				  <dt>个人描述：</dt><span><p id="user_info">用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介</p></span>
+		    </div>
+		</div>
+		</div>
+	  </div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/header.js"></script>
+	<script>
+		function getQueryString(name) {
+        	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        	var r = window.location.search.substr(1).match(reg);
+        	if (r != null) return unescape(r[2]);
+        	return null;
+      	}
+      	var userid = getQueryString('id');
+        $.post("user/information", {"id" : userid}, function (data) {
+        	console.log(data);
+        	document.getElementById('user_name').innerHTML = data.Uid;
+        	document.getElementById('user_score').innerHTML = data.Score;
+        	document.getElementById('user_sex').innerHTML = data.RelationshipStatus;
+        	document.getElementById('user_info').innerHTML = data.Description;
+        	document.getElementById('user_age').innerHTML = data.Age;
+        	document.getElementById('user_email').innerHTML = data.Phone;
+      	});
+	</script>
+  </body>
+</html>

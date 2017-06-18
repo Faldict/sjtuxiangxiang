@@ -38,6 +38,10 @@ func userController(w http.ResponseWriter, req *http.Request) {
 		tradeRecordController(w, req)
 	case "listShare":
 		listShareController(w, req)
+	case "updateinfo":
+		updateInfoController(w, req)
+	case "information":
+		informationController(w, req)
 	default:
 		NotFound(w, req)
 	}
@@ -93,6 +97,25 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 		Jaccount := req.FormValue("Jaccount")
 		rst := register(username, passwd, email, description, Age, RelationStatus, Jaccount)
 		w.Write(rst)
+	}
+}
+
+func updateInfoController(w http.ResponseWriter, req *http.Request) {
+	if req.Method == "POST" {
+		cookie_read, err := req.Cookie("uid")
+		if err != nil {
+			log.Fatal(err)
+			io.WriteString(w, "Not login!")
+			return 
+		}
+
+		username := cookie_read.Value
+		description := req.FormValue("description")
+		Jaccount := req.FormValue("jaccount")
+		age := req.FormValue("age")
+		RelationStatus := req.FormValue("RelationStatus")
+		result := updateInfo(username, description, age, RelationStatus, Jaccount)
+		io.WriteString(w, result)
 	}
 }
 
@@ -176,6 +199,18 @@ func infoUserController(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func informationController(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	if req.Method == "POST" {
+		userid := req.FormValue("id")
+		info := userInfo(userid)
+		w.Write(info)
+	}
+}
+
 func addItemController(w http.ResponseWriter, req *http.Request) {
 	cookie_read, err := req.Cookie("uid")
 	if err != nil {
@@ -188,7 +223,7 @@ func addItemController(w http.ResponseWriter, req *http.Request) {
 		obj_name := req.FormValue("obj_name")
 		obj_price := req.FormValue("obj_price")
 		obj_info := req.FormValue("obj_info")
-		use_time := req.FormValue("use_time")
+		use_time := req.FormValue("end_time")
 		typ := req.FormValue("type")
 		rst := addItem(obj_name, uid, obj_price, obj_info, use_time, typ)
 		w.Write(rst)

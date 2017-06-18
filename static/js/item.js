@@ -64,7 +64,7 @@ function getRentItem() {
             tpl.class = "col-md-4";
             list.appendChild(tpl);
         }
-    })
+    });
 }
 
 function getWantItem() {

@@ -45,8 +45,7 @@ function getTradeRecord() {
 				'</span></td>'+status2+
 				'</span></td><td><a href="object.html?id='+
 				item.Obj_name+'" id="item' + String(i) + '">' + item.Obj_name +
-				'</a></td><td><button type="button" id="contact' + String(i) + '" class="btn btn-link" data-toggle="modal" data-target="'+
-				item.Uid_other+'">'+
+				'</a></td><td><a href="userinformation.html?id=' + item.Uid_other + '" id="contact' + String(i) + '" class="btn btn-link">'+
 				item.Uid_other+
 				'</button></td><td>'+item.Upload_time+
 				'</td>'+status_identify+'</button></td>';
