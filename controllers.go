@@ -133,16 +133,8 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "text/html")
 			w.Header().Set("Cache-Control", "no-cache")
 			w.Header().Set("Access-Control-Allow-Origin", "*")
-			// rst = []byte("200000") //200000登录成功
-			// w.Write(rst)
-			fi, err := os.Open("static/index.html")
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer fi.Close()
-			fd, err := ioutil.ReadAll(fi)
-			io.WriteString(w, string(fd))
-			return
+			rst = []byte("200000") //200000登录成功
+			w.Write(rst)
 		} else {
 			rst = []byte("200001") //300001密码错误
 			w.Write(rst)
