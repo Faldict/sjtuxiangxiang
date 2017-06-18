@@ -163,20 +163,16 @@ func infoUserController(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	cookie_read, err := req.Cookie("uid")
+
 	if err != nil {
 		log.Fatal(err.Error())
 		w.Write([]byte("100000")) //100000未登录
 		return
 	}
 	uid := cookie_read.Value
-	if req.Method == "POST" {
-		info := userinfo(uid)
-		commentData, err := json.MarshalIndent(info, "", "    ")
-		if err != nil {
-			w.Write([]byte("600001"))
-			return
-		}
-		io.Copy(w, bytes.NewReader(commentData))
+	if req.Method == "GET" {
+		info := userInfo(uid)
+		w.Write(info)
 	}
 }
 

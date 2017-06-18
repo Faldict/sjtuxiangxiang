@@ -47,7 +47,8 @@ func addItem(obj_name string, uid string, obj_price string, obj_info string, use
 	return []byte("400000") //400000添加成功
 }
 
-func userinfo(uid string) []byte {
+func userInfo(uid string) []byte {
+	fmt.Println(uid)
 	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)
@@ -70,10 +71,10 @@ func userinfo(uid string) []byte {
 		Jaccount           string
 		Score              string
 		Num                string
+		Phone              string
 	}
 
 	var tmp data
-	rst := []data{}
 
 	for rows.Next() {
 		rows.Columns()
@@ -82,9 +83,10 @@ func userinfo(uid string) []byte {
 			log.Fatal(err)
 			return []byte("300005") //读取错误
 		}
-		rst = append(rst, tmp)
 	}
-	b, err := json.Marshal(rst)
+
+	db.QueryRow("SELECT EMAIL FROM users WHERE user_ID = ?", uid).Scan(&tmp.Phone)
+	b, err := json.Marshal(tmp)
 	if err != nil {
 		return []byte("600001") // json错误
 	}
@@ -126,7 +128,6 @@ func listItem(typ string) []byte {
 			log.Fatal(err)
 		}
 		rst = append(rst, tmp)
-		fmt.Println(tmp.Obj_name)
 	}
 	b, err := json.Marshal(rst)
 
@@ -309,7 +310,7 @@ func itemInfo(obj_id string) []byte {
 		Score       int
 	}
 	var result data
-	fmt.Println(obj_id)
+
 	err = db.QueryRow("SELECT Uploader, UploadTime, OBJ_price, OBJ_INFO, OBJ_usetime FROM Items WHERE OBJ_name = '" + obj_id + "'").Scan(&result.Uploader, &result.Upload_time, &result.Obj_price, &result.Obj_info, &result.Use_time)
 	result.Score = 80
 	// err = db.QueryRow("SELECT score FROM info WHERE user_ID = ?", result.uploader).Scan(&result.score)
@@ -317,7 +318,7 @@ func itemInfo(obj_id string) []byte {
 		log.Fatal(err)
 		return []byte("300002")
 	}
-	fmt.Println(result.Uploader)
+
 	result.Obj_name = obj_id
 	j, err := json.Marshal(result)
 	return j

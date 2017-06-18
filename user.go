@@ -122,6 +122,7 @@ func register(username string, passwd string, email string, description string, 
 //}
 
 func tradeRecord(uid string) []byte {
+	fmt.Println("uid : " + uid)
 	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 	if err != nil {
 		log.Fatal(err)

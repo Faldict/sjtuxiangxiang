@@ -23,7 +23,7 @@ function clearCookie(name) {
 
 function logout() {
     clearCookie('uid');
-    window.location.reload();
+    location.href = "index.html";
 }
 
 // document.cookie = "uid=Faldict";

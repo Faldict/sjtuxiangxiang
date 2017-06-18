@@ -56,7 +56,7 @@
 							</ul>
 						</li>
 						<li>
-							<a href="#" onclick="logout();return false;">注销</a>
+							<a href="#" id='logstate'>注销</a>
 						</li>
 					</ul>
 				</div>
@@ -235,12 +235,12 @@
 		<div class="col-md-10">
 			<div class="thumbnail">
 		      <img src="img/idphoto.jpg" alt="..." class = "img-circle">
-		        <dt>用户名：</dt><span> Peter Chen<br></span>
-				  <dt>享享信用：</dt><span>43</span>  <span class="label label-warning">二级</span> <br>
-				  <dt>性别：</dt><span>男<br></span>
-				  <dt>年龄：</dt><span>21<br></span>
-				  <dt>手机号：</dt><span>15008926438<br></span>
-				  <dt>个人描述：</dt><span><p>用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，<br></p></span>
+		        <dt>用户名：</dt><span id="user_name"> Peter Chen</span><br>
+				  <dt>享享信用：</dt><span id="user_score">43</span>  <span class="label label-warning">二级</span> <br>
+				  <dt>情感状态：</dt><span id="user_sex">男</span><br>
+				  <dt>年龄：</dt><span id="user_age">21</span><br>
+				  <dt>手机号：</dt><span id="user_email">15008926438</span><br>
+				  <dt>个人描述：</dt><span><p id="user_info">用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介</p></span><br>
 		      <div class="caption">
 		     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editprofile" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
 					  完善我的个人信息
@@ -257,34 +257,8 @@
 <div class="container site-footer-container">
 <p class="text-right">© 2017 <a href="#">SJTU享享</a></p>
 </div>
-  <!-- Modal -->
-<div class="modal fade" id="target" tabindex="-1" role="dialog" aria-labelledby="target">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">联系人详情</h4>
-      </div>
-      <div class="modal-body">
-      <div class="row">
-      	<div class="col-md-3"></div>
-		<div class="col-md-6">
-		      <img src="img/idphoto.jpg" alt="..." class = "img-circle" style="width: auto;display: table;margin-left: auto;margin-right: auto;">
-		        <dt>用户名：</dt><span> Peter Chen<br></span>
-				  <dt>享享信用：</dt><span>43</span>  <span class="label label-warning">二级</span> <br>
-				  <dt>性别：</dt><span>男<br></span>
-				  <dt>年龄：</dt><span>21<br></span>
-				  <dt>手机号：</dt><span>15008926438<br></span>
-				  <dt>个人描述：</dt><span><p>用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，用户自己填入的个人简介，<br></p></span>
-		</div>
-      </div></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
-      </div>
-    </div>
-  </div>
-</div>
-  <!-- Modal 修改个人信息 这里还未完成！！ -->
+
+<!-- Modal 修改个人信息 这里还未完成！！ -->
 <div class="modal fade" id="editprofile" tabindex="-1" role="dialog" aria-labelledby="editprofile">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -331,13 +305,10 @@
 									个人描述
 								</label>
 							<textarea class="form-control" rows="5" name="request-content"></textarea></br>
-
-
-
+							</div>
 						</form>
-
-      </div></div>
-      <div class="modal-footer">
+					</div></div>
+      	<div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
         <button type="button" class="btn btn-primary" onclick="addItem()">发布</button>
       </div>
@@ -345,11 +316,27 @@
   </div>
 </div>
 
+
 <!-- script -->
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
     <script src="js/header.js"></script>
+    <script>
+        if (getCookie("uid") == "") {
+            location.href = "login.html";
+        }
+        var url = "/user/info";
+        $.getJSON(url, function (data) {
+        	console.log(data);
+        	document.getElementById('user_name').innerHTML = data.Uid;
+        	document.getElementById('user_age').innerHTML = data.Age;
+        	document.getElementById('user_sex').innerHTML = data.RelationshipStatus;
+        	document.getElementById('user_score').innerHTML = data.Score;
+        	document.getElementById('user_info').innerHTML = data.Description;
+        	document.getElementById('user_email').innerHTML = data.Phone;
+        });
+    </script>
     <script src="js/TradeRecord.js"></script>
   </body>
 </html>
