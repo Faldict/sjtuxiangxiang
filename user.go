@@ -12,6 +12,8 @@ package main
 import (
 	"database/sql"
 	"log"
+	"encoding/json"
+	"fmt"
 	//"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -118,3 +120,96 @@ func register(username string, passwd string, email string, description string, 
 
 //return []byte("Logout successfully")
 //}
+
+func tradeRecord(uid string) []byte {
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM ShareRequests WHERE uid_request = ? OR uid_response = ?", uid, uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		Obj_name   string // 对方的uid
+		Uid_other    string
+		Cnt         string
+		Upload_time string
+		Typ         string // "0"/"1" 需求出租
+	}
+
+	var tmp data
+	var uid_1, uid_2 string
+	rst := []data{}
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&tmp.Obj_name, &uid_1, &uid_2, &tmp.Cnt, &tmp.Upload_time)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if uid_1 == uid {
+			tmp.Uid_other = uid_2
+			tmp.Typ = "0"
+			fmt.Println("uid1 : " + uid_1)
+		} else {
+			tmp.Uid_other = uid_1
+			tmp.Typ = "1"
+			fmt.Println("uid2 : " + uid_2)
+		}
+		rst = append(rst, tmp)
+	}
+	b, err := json.Marshal(rst)
+	if err != nil {
+		return []byte("600001")
+	}
+	return b
+}
+
+func listShare(uid string) []byte {
+	db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300001")
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM Items WHERE Uploader = ?", uid)
+	if err != nil {
+		log.Fatal(err)
+		return []byte("300004")
+	}
+
+	type data struct {
+		Obj_name    string
+		Uid         string
+		Upload_time string
+		Obj_state   string // sorry to change it to be string
+		Obj_price   string // it need to be a string
+		Obj_info    string
+		Use_time    string
+		Obj_type    string
+	}
+
+	var tmp data
+	rst := []data{}
+
+	for rows.Next() {
+		rows.Columns()
+		err = rows.Scan(&tmp.Obj_name, &tmp.Uid, &tmp.Upload_time, &tmp.Obj_state, &tmp.Obj_price, &tmp.Obj_info, &tmp.Use_time, &tmp.Obj_type)
+		if err != nil {
+			log.Fatal(err)
+		}
+		rst = append(rst, tmp)
+	}
+	b, err := json.Marshal(rst)
+	if err != nil {
+		return []byte("600001")
+	}
+	return b
+}
