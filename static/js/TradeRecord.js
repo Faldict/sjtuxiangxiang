@@ -35,8 +35,10 @@ function getTradeRecord() {
 			var status2=(item.Typ==0)?'<td><span class="label label-primary">租入'
 						:'<td><span class="label label-success">租出';
 			var status_identify;
-			if (item.Cnt == 0 && item.Typ==1) '<td><button type="button" class="btn btn-primary btn-sm" onclick="confirmTrade(' +  String(i) + ')">完成交易'
-						:'<td><button type="button" class="btn btn-sm" disabled="disabled">已经完成';
+			if (item.Cnt == 0 && item.Typ==1) status_identify = '<td><button type="button" class="btn btn-primary btn-sm" onclick="confirmTrade(' +  String(i) + ')">完成交易';
+			else if (item.Cnt == 0 && item.Cnt == 0) status_identify = '<td><button type="button" class="btn btn-primary btn-sm" disabled="disabled"">等待确认';
+			else status_identify = '<td><button type="button" class="btn btn-sm" disabled="disabled">已经完成';
+
 			var tpl=document.createElement('tr');
 
 				tpl.innerHTML=status1+
