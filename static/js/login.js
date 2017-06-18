@@ -25,6 +25,7 @@ function login() {
         if (status == "200000") {
             setCookie('uid', username, 3);
             console.log("Welcome!");
+            location.href = "index.html";
         } else {
             alert("Login Error!");
             console.log("Error Code: " + status + '\n');

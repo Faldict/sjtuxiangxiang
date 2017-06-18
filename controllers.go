@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"os"
 	"log"
 	"net/http"
 	"strings"
@@ -101,10 +99,9 @@ func registerUserController(w http.ResponseWriter, req *http.Request) {
 func loginUserController(w http.ResponseWriter, req *http.Request) {
 	var rst []byte
 	var PSD string
-	if req.Method == "GET" {
-		query := req.URL.Query()
-		username := query["username"][0]
-		passwd := query["password"][0]
+	if req.Method == "POST" {
+		username := req.FormValue("username")
+		passwd := req.FormValue("password")
 		db, err := sql.Open("mysql", "sjtuxx:sjtuxx@tcp(localhost:3306)/sjtuxiangxiang")
 		if err != nil {
 			log.Fatal(err.Error())
@@ -130,11 +127,10 @@ func loginUserController(w http.ResponseWriter, req *http.Request) {
 				MaxAge: 86400,
 			}
 			http.SetCookie(w, &cookie)
-			w.Header().Set("Content-Type", "text/html")
-			w.Header().Set("Cache-Control", "no-cache")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
 			rst = []byte("200000") //200000登录成功
 			w.Write(rst)
+			fmt.Println("login success!")
+			return
 		} else {
 			rst = []byte("200001") //300001密码错误
 			w.Write(rst)

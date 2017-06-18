@@ -26,7 +26,7 @@ function logout() {
     window.location.reload();
 }
 
-document.cookie = "uid=Faldict";
+// document.cookie = "uid=Faldict";
 if (getCookie('uid')) {
     console.log('Welcome!');
     document.getElementById('logstate').innerHTML = "Log Out";
