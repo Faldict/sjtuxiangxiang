@@ -358,12 +358,7 @@ func tradeRecordController(w http.ResponseWriter, req *http.Request) {
 	uid := cookie_read.Value
 	if req.Method == "GET" {
 		rst := tradeRecord(uid)
-		commentData, err := json.MarshalIndent(rst, "", "    ")
-		if err != nil {
-			w.Write([]byte("600001"))
-			return
-		}
-		io.Copy(w, bytes.NewReader(commentData))
+		w.Write(rst)
 	}
 }
 
@@ -380,11 +375,6 @@ func listShareController(w http.ResponseWriter, req *http.Request) {
 	uid := cookie_read.Value
 	if req.Method == "GET" {
 		rst := listShare(uid)
-		commentData, err := json.MarshalIndent(rst, "", "    ")
-		if err != nil {
-			w.Write([]byte("600001"))
-			return
-		}
-		io.Copy(w, bytes.NewReader(commentData))
+		w.Write(rst)
 	}
 }

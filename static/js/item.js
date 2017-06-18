@@ -76,7 +76,7 @@ function getWantItem() {
             console.log(item);
             var status = item.Obj_state == "0" ? '<td><span class="label label-default">未完成' : '<td><span class="label label-success">已完成';
             var tpl = document.createElement('tr');
-                tpl.innerHTML = '<td><span class="label label-default">未完成' +
+                tpl.innerHTML = status +
                 '</span></td><td><a href="object.html?id=' +
                 item.Obj_name + '">' + item.Obj_name +
                 '</a></td><td>' + item.Upload_time + '至' + item.Use_time + '</td><td>' + item.Uid + '</td><td>' + item.Obj_price + '元/天 </td>';
